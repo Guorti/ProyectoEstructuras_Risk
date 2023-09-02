@@ -680,8 +680,6 @@ int Risk::generarAleatorio() {
 
  
   std::vector<int> Risk::dadosFunc(int cantidadDados) {
-    int valorDado = 0;
-    int Aux;
     std::vector<int> dados;
 
     if(cantidadDados==1){
@@ -699,13 +697,8 @@ int Risk::generarAleatorio() {
         dados.resize(1);
       }
     }
-
-
     // Se ordenan para tener los dos mayores datos (Chat gpt me lo recomendó, utiliza algo llamado introSort)
     std::sort(dados.begin(), dados.end(), std::greater<int>());
-   
-    
-    
 
     return dados;
 }
@@ -719,6 +712,7 @@ int Risk::generarAleatorio() {
       int tropasAtaque;
       bool flag;
       bool flagAux;
+      bool flagOpcion;
       
       if(atacantePais->getIDPais()==defensorPais->getIDPais()){
            return 0;
@@ -744,7 +738,9 @@ int Risk::generarAleatorio() {
       //HACER LO DE LOS DADOS Y CONTINUAR HASTA QUE ALGUNO DE LOS PAISES SE QUEDE SIN TROPAS
       flag=false;
       flagAux=false;
+      flagOpcion=false;
       int ronda=0;
+      int opcionSeleccion;
       do{
         //Si el defensor tiene mas de 2 tropas en el territorio se usaran 2 dados
         if(defensorPais->getCantidadArmadas()>=2){
@@ -766,25 +762,47 @@ int Risk::generarAleatorio() {
 
           std::cout<<"Ronda: "<<ronda<<"\n";
           if(dadosRojos[0]>dadosBlancos[0]){
-              //reduzco ejercito del atacante
+              //reduzco ejercito del defensor
               defensorPais->setCantidadArmadas(defensorPais->getCantidadArmadas()-1);
               std::cout<<"Dados Rojos: "<<dadosRojos[0]<<"\n";
               std::cout<<"Dados Blancos: "<<dadosBlancos[0]<<"\n";
               std::cout<<"Gana Atacante.\n";
               std::cout<<"Tropas Atacante: "<<tropasAtaque<<"\n";
               std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadArmadas()<<"\n\n";
+              if(tropasAtaque>1&&defensorPais->getCantidadArmadas()>1){
+                if(dadosRojos[1]>dadosBlancos[1]){
+                  //reduzco ejercito del atacante
+                  defensorPais->setCantidadArmadas(defensorPais->getCantidadArmadas()-1);
+                  std::cout<<"Dados Rojos: "<<dadosRojos[1]<<"\n";
+                  std::cout<<"Dados Blancos: "<<dadosBlancos[1]<<"\n";
+                  std::cout<<"Gana Atacante.\n";
+                  std::cout<<"Tropas Atacante: "<<tropasAtaque<<"\n";
+                  std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadArmadas()<<"\n\n";
+                }
+              }
           }
           if(dadosRojos[0]<=dadosBlancos[0]){
               //reduzco ejercito del atacante
               tropasAtaque=tropasAtaque-1;
-              //atacantePais->setUnidadesInfanteria(atacantePais->getUnidadesInfanteria()-1);
               std::cout<<"Dados Rojos: "<<dadosRojos[0]<<"\n";
               std::cout<<"Dados Blancos: "<<dadosBlancos[0]<<"\n";
               std::cout<<"Gana Defensor.\n";
               std::cout<<"Tropas Atacante: "<<tropasAtaque<<"\n";
               std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadArmadas()<<"\n\n";
+              if(tropasAtaque>1&&defensorPais->getCantidadArmadas()>1){
+                if(dadosRojos[1]<=dadosBlancos[1]){
+                  //reduzco ejercito del atacante
+                  tropasAtaque=tropasAtaque-1;
+                  std::cout<<"Dados Rojos: "<<dadosRojos[1]<<"\n";
+                  std::cout<<"Dados Blancos: "<<dadosBlancos[1]<<"\n";
+                  std::cout<<"Gana Defensor.\n";
+                  std::cout<<"Tropas Atacante: "<<tropasAtaque<<"\n";
+                  std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadArmadas()<<"\n\n";
+                }
+              }
+              
           }
-          if(defensorPais->getCantidadArmadas()==0){
+          if(defensorPais->getCantidadArmadas()<=0){
               //pedir al usuario poner una cantidad de tropas en el Pais
               //cambiar el color de ocupacion
               flag=true;
@@ -804,15 +822,25 @@ int Risk::generarAleatorio() {
                   }
               }while(flagAux==false);
               
-              
-              
           }
-          if(tropasAtaque==0){
+          if(tropasAtaque<=0){
               //Mostrar que el asalto ha acabado
               std::cout<<"Usted ha perdido la batalla contra "<<defensorPais->getNombrePais()<<"\n";
               atacantePais->setCantidadArmadas(atacantePais->getCantidadArmadas()+tropasAtaque);
               flag=true;
           }
+
+          do{
+            std::cout<<"Desea seguir atacando? 1(SI) 2(NO)\n";
+            std::cin>>opcionSeleccion;
+            if(opcionSeleccion==2){
+              std::cout<<"Sus "<<tropasAtaque<<" han regresado satisfactoriamente\n";
+              atacantePais->setCantidadArmadas(atacantePais->getCantidadArmadas()+tropasAtaque);
+              flagOpcion=true;
+              flag=true;
+            }
+          }while(flagOpcion==false);
+          
           ronda++;
           
       }while(flag==false);

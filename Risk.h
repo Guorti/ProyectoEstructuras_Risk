@@ -17,8 +17,6 @@ public:
     int generarAleatorio();
     void turno(int turno);
     int moverInfanteria(std::list<Pais>::iterator primerPais, std::list<Pais>::iterator segundoPais);
-    std::vector<int> dadosRojosFunc();
-    std::vector<int> dadosBlancosFunc();
     std::vector<int> dadosFunc(int cantidadDados);
     int ataquePais(std::list<Pais>::iterator atacantePais, std::list<Pais>::iterator defensorPais);
     std::list<Pais>::iterator seleccionTerrenoColindante(std::list<Pais>::iterator itdorDominio);
