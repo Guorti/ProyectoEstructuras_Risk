@@ -240,12 +240,12 @@
      
             if(itdorP->getIDPais()==consolaPais){
               flag=true;
-              if(itdorP->getCantidadInfanterias()==0){
+              if(itdorP->getCantidadArmadas()==0){
 
              
                
                 itdorP->setColorOcupacion(itdorJugadores->getColor());
-                itdorP->setCantidadInfanterias(itdorP->getCantidadInfanterias()+1);
+                itdorP->setCantidadArmadas(itdorP->getCantidadArmadas()+1);
                 itdorJugadores->setArmadas(itdorJugadores->getArmadas()-1);
 
                 system("cls");
@@ -348,7 +348,7 @@ itdorJugadores=jugadores.begin();
                 std::cout<<"Ingrese la cantidad de infanterias que ingresara: ";
                 std::cin>>consola;
                 if(itdorJugadores->getArmadas()>=consola){
-                 itdorP->setCantidadInfanterias(itdorP->getCantidadInfanterias()+consola);
+                 itdorP->setCantidadArmadas(itdorP->getCantidadArmadas()+consola);
                   itdorJugadores->setArmadas(itdorJugadores->getArmadas()-consola);
                   system("cls");
                 std::cout<<"\nEl jugador "<< itdorJugadores->getIdJugador()<<" agrego a "<<itdorP->getNombrePais()<<" "<< consola <<" Unidades"<<"!"<<std::endl;
@@ -387,7 +387,7 @@ itdorJugadores=jugadores.begin();
 
 //LANZAR DADO--------------------
 
-int Risk::lanzarDado() {
+int Risk::generarAleatorio() {
 
     // Generar un número aleatorio entre 1 y 6
     return (std::rand() % 6) + 1;
@@ -551,7 +551,7 @@ int Risk::lanzarDado() {
                 std::cout<<"Ingrese la cantidad de infanterias que ingresara: ";
                 std::cin>>consola;
                 if(itdorJugador->getArmadas()>=consola){
-                 itdorP->setCantidadInfanterias(itdorP->getCantidadInfanterias()+consola);
+                 itdorP->setCantidadArmadas(itdorP->getCantidadArmadas()+consola);
                   itdorJugador->setArmadas(itdorJugador->getArmadas()-consola);
                   system("clear");
                 std::cout<<"\nEl jugador "<< itdorJugador->getIdJugador()<<" agrego a "<<itdorP->getNombrePais()<<" "<< consola <<" Unidades"<<"!"<<std::endl;
@@ -647,14 +647,14 @@ int Risk::lanzarDado() {
         std::cin>>cantidad;
         
        
-        if(cantidad<primerPais->getCantidadInfanterias()){
+        if(cantidad<primerPais->getCantidadArmadas()){
             
             
             
             
-        primerPais->setCantidadInfanterias(primerPais->getCantidadInfanterias()-cantidad);
+        primerPais->setCantidadArmadas(primerPais->getCantidadArmadas()-cantidad);
         
-        segundoPais -> setCantidadInfanterias(segundoPais->getCantidadInfanterias()+cantidad);
+        segundoPais -> setCantidadArmadas(segundoPais->getCantidadArmadas()+cantidad);
         
         system("cls");
         
@@ -677,45 +677,38 @@ int Risk::lanzarDado() {
         }
     return 0;
    }
+
  
-  std::vector<int> Risk::dadosRojosFunc() {
+  std::vector<int> Risk::dadosFunc(int cantidadDados) {
     int valorDado = 0;
     int Aux;
-    std::vector<int> dadosRojos;
+    std::vector<int> dados;
 
-    dadosRojos.push_back(lanzarDado());
-    dadosRojos.push_back(lanzarDado());
-
-    for (int i = 0; i < 3; i++) {
-        Aux = lanzarDado();
-        if (valorDado <= Aux) {
-            dadosRojos.push_back(Aux);
-        }
-        valorDado = lanzarDado();
+    if(cantidadDados==1){
+        dados.push_back(generarAleatorio());
+    }
+    if(cantidadDados==2){
+      for(int i=0;i<cantidadDados;i++){
+        dados.push_back(generarAleatorio());
+      }
+    }
+    if(cantidadDados==3){
+      for(int i=0;i<cantidadDados;i++){
+        dados.push_back(generarAleatorio());
+        // Se acomoda el tamaño para descartar el ultimo
+        dados.resize(1);
+      }
     }
 
-    // Se ordenan para tener los dos mayores datos
-    std::sort(dadosRojos.begin(), dadosRojos.end(), std::greater<int>());
-   
-    // Se acomoda el tamaño para descartar el ultimo
-    dadosRojos.resize(1);
 
-    return dadosRojos;
+    // Se ordenan para tener los dos mayores datos (Chat gpt me lo recomendó, utiliza algo llamado introSort)
+    std::sort(dados.begin(), dados.end(), std::greater<int>());
+   
+    
+    
+
+    return dados;
 }
- 
-  std::vector<int> Risk::dadosBlancosFunc(){
-      std::vector<int> dadosBlancos;
-      dadosBlancos.push_back(lanzarDado());
-      dadosBlancos.push_back(lanzarDado());
-      
-      std::sort(dadosBlancos.begin(), dadosBlancos.end(), std::greater<int>());
-      
-      dadosBlancos.resize(1);
-     
-      return dadosBlancos;
-  }
- 
- 
  
  
  //---------------------------------------------------------------------------
@@ -733,10 +726,10 @@ int Risk::lanzarDado() {
      
       do{
         
-        std::cout<<"Indique con cuanta infanteria realizara el ataque desde "<<atacantePais->getNombrePais()<<"\n";
-        std::cout<<"Infanteria disponible: "<<atacantePais->getCantidadInfanterias()<<"\n";
+        std::cout<<"Indique con cuantas armadas realizara el ataque desde "<<atacantePais->getNombrePais()<<", Maximo 3\n";
+        std::cout<<"Infanteria disponible: "<<atacantePais->getCantidadArmadas()<<"\n";
         std::cin>>tropasAtaque;
-        if(tropasAtaque>=atacantePais->getCantidadInfanterias()){
+        if(tropasAtaque>=atacantePais->getCantidadArmadas()|| tropasAtaque>3){
             flag=false;
             std::cout<<"Cantidad invalida\n";
             return 0;
@@ -746,24 +739,40 @@ int Risk::lanzarDado() {
       }while(flag==false);
       
       //Le restamos al pais la cantidad de tropas que fueron a atacar
-       atacantePais->setCantidadInfanterias(atacantePais->getCantidadInfanterias()-tropasAtaque);
+       atacantePais->setCantidadArmadas(atacantePais->getCantidadArmadas()-tropasAtaque);
      
       //HACER LO DE LOS DADOS Y CONTINUAR HASTA QUE ALGUNO DE LOS PAISES SE QUEDE SIN TROPAS
       flag=false;
       flagAux=false;
       int ronda=0;
       do{
-          dadosRojos = dadosRojosFunc();
-          dadosBlancos = dadosBlancosFunc();
+        //Si el defensor tiene mas de 2 tropas en el territorio se usaran 2 dados
+        if(defensorPais->getCantidadArmadas()>=2){
+          dadosRojos=dadosFunc(2);
+        }else{
+          dadosRojos=dadosFunc(1);
+        }
+
+        //Si el atacante ataca con 3 armadas, se usaran 3 dados
+        if(atacantePais->getCantidadArmadas()==3){
+          dadosRojos=dadosFunc(3);
+        }
+        if(atacantePais->getCantidadArmadas()==2){
+          dadosRojos=dadosFunc(2);
+        }
+        if(atacantePais->getCantidadArmadas()==1){
+          dadosRojos=dadosFunc(1);
+        }
+
           std::cout<<"Ronda: "<<ronda<<"\n";
           if(dadosRojos[0]>dadosBlancos[0]){
               //reduzco ejercito del atacante
-              defensorPais->setCantidadInfanterias(defensorPais->getCantidadInfanterias()-1);
+              defensorPais->setCantidadArmadas(defensorPais->getCantidadArmadas()-1);
               std::cout<<"Dados Rojos: "<<dadosRojos[0]<<"\n";
               std::cout<<"Dados Blancos: "<<dadosBlancos[0]<<"\n";
               std::cout<<"Gana Atacante.\n";
               std::cout<<"Tropas Atacante: "<<tropasAtaque<<"\n";
-              std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadInfanterias()<<"\n\n";
+              std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadArmadas()<<"\n\n";
           }
           if(dadosRojos[0]<=dadosBlancos[0]){
               //reduzco ejercito del atacante
@@ -773,24 +782,24 @@ int Risk::lanzarDado() {
               std::cout<<"Dados Blancos: "<<dadosBlancos[0]<<"\n";
               std::cout<<"Gana Defensor.\n";
               std::cout<<"Tropas Atacante: "<<tropasAtaque<<"\n";
-              std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadInfanterias()<<"\n\n";
+              std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadArmadas()<<"\n\n";
           }
-          if(defensorPais->getCantidadInfanterias()==0){
+          if(defensorPais->getCantidadArmadas()==0){
               //pedir al usuario poner una cantidad de tropas en el Pais
               //cambiar el color de ocupacion
               flag=true;
-              atacantePais->setCantidadInfanterias(atacantePais->getCantidadInfanterias()+tropasAtaque);
-              std::cout<<"Cantidad de tropas a disposicion: "<<atacantePais->getCantidadInfanterias()<<"\n";
+              atacantePais->setCantidadArmadas(atacantePais->getCantidadArmadas()+tropasAtaque);
+              std::cout<<"Cantidad de tropas a disposicion: "<<atacantePais->getCantidadArmadas()<<"\n";
               do{
                   std::cout<<"Ha ganado la batalla, Seleccione un cantidad de tropas para ocupar\n";
                   std::cin>>opcion;
-                  if(opcion>=atacantePais->getCantidadInfanterias()){
+                  if(opcion>=atacantePais->getCantidadArmadas()){
                       flagAux=false;
                   }
                   else{
                       flagAux=true;
                       defensorPais->setColorOcupacion(atacantePais->getColorOcupacion());
-                      defensorPais->setCantidadInfanterias(opcion);
+                      defensorPais->setCantidadArmadas(opcion);
                       return 1;
                   }
               }while(flagAux==false);
@@ -801,7 +810,7 @@ int Risk::lanzarDado() {
           if(tropasAtaque==0){
               //Mostrar que el asalto ha acabado
               std::cout<<"Usted ha perdido la batalla contra "<<defensorPais->getNombrePais()<<"\n";
-              atacantePais->setCantidadInfanterias(atacantePais->getCantidadInfanterias()+tropasAtaque);
+              atacantePais->setCantidadArmadas(atacantePais->getCantidadArmadas()+tropasAtaque);
               flag=true;
           }
           ronda++;
