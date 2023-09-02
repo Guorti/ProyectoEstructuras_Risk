@@ -14,7 +14,7 @@
         std::cout << "idJugador: " << idJugador << std::endl;
         std::cout << "nombre: " << nombre << std::endl;
         std::cout << "color: " << color << std::endl;
-        std::cout << "unidadesInfanteria: " << unidadesInfanteria << std::endl;
+        std::cout << "armadas: " << armadas << std::endl;
     }
 
     

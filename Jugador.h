@@ -2,20 +2,22 @@
 #ifndef JUGADOR_H
 #define JUGADOR_H
 
+#include <string>
+
 //CLASE JUGADOR-------------------------
 class Jugador {
 private:
     int idJugador;
     std::string nombre;
     int color;
-    int unidadesInfanteria;
+    int armadas;
     int cartas=0;
     
 public:
     Jugador(int id, const std::string& nombre, int color, int unidadesInf)
-        : idJugador(id), nombre(nombre), color(color), unidadesInfanteria(unidadesInf) {}
+        : idJugador(id), nombre(nombre), color(color), armadas(unidadesInf) {}
 
-    Jugador() : idJugador(0), nombre(""), color(0), unidadesInfanteria(0) {}
+    Jugador() : idJugador(0), nombre(""), color(0), armadas(0) {}
     
     
     int getIdJugador (){
@@ -32,12 +34,12 @@ public:
     }
 
 
-    int getUnidadesInfanteria(){
-      return unidadesInfanteria;
+    int getArmadas(){
+      return armadas;
     }
 
-    void setUnidadesInfanteria(int UnidadesInfanteria){
-      unidadesInfanteria = UnidadesInfanteria;
+    void setArmadas(int armadas){
+      armadas = armadas;
     }
     
     void setCartas(int ncartas){

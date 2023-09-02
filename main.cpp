@@ -9,6 +9,8 @@
 #include "Pais.h"
 #include "Continente.h"
 #include "Risk.h"
+#include "Carta.h"
+
 
 std::string consola;
 

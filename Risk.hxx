@@ -246,7 +246,7 @@
                
                 itdorP->setColorOcupacion(itdorJugadores->getColor());
                 itdorP->setCantidadInfanterias(itdorP->getCantidadInfanterias()+1);
-                itdorJugadores->setUnidadesInfanteria(itdorJugadores->getUnidadesInfanteria()-1);
+                itdorJugadores->setArmadas(itdorJugadores->getArmadas()-1);
 
                 system("cls");
                 std::cout<<"\nEl jugador "<< itdorJugadores->getIdJugador()<<" reclamo el territorio "<<itdorP->getNombrePais()<<"!"<<std::endl;
@@ -343,13 +343,13 @@ itdorJugadores=jugadores.begin();
      
             if(itdorP->getIDPais()==consolaPais&&itdorP->getColorOcupacion()==itdorJugadores->getColor()){
  
-              if(itdorJugadores->getUnidadesInfanteria()>0){
-                std::cout<<"Posee "<<itdorJugadores->getUnidadesInfanteria()<<" Unidades de infanteria\n";
+              if(itdorJugadores->getArmadas()>0){
+                std::cout<<"Posee "<<itdorJugadores->getArmadas()<<" Unidades de infanteria\n";
                 std::cout<<"Ingrese la cantidad de infanterias que ingresara: ";
                 std::cin>>consola;
-                if(itdorJugadores->getUnidadesInfanteria()>=consola){
+                if(itdorJugadores->getArmadas()>=consola){
                  itdorP->setCantidadInfanterias(itdorP->getCantidadInfanterias()+consola);
-                  itdorJugadores->setUnidadesInfanteria(itdorJugadores->getUnidadesInfanteria()-consola);
+                  itdorJugadores->setArmadas(itdorJugadores->getArmadas()-consola);
                   system("cls");
                 std::cout<<"\nEl jugador "<< itdorJugadores->getIdJugador()<<" agrego a "<<itdorP->getNombrePais()<<" "<< consola <<" Unidades"<<"!"<<std::endl;
                  
@@ -371,7 +371,7 @@ itdorJugadores=jugadores.begin();
     }
         contador=0;
         for (std::list<Jugador>::iterator itdorJug = jugadores.begin(); itdorJug != jugadores.end();++itdorJug) {
-          contador=contador + itdorJug->getUnidadesInfanteria();
+          contador=contador + itdorJug->getArmadas();
         }
         if(contador==0){
           flag=true;
@@ -490,7 +490,7 @@ int Risk::lanzarDado() {
     std::cout<<"Desea reclamarlas (1) SI (2)NO\n";
     std::cin>>opcion;
     if(opcion==1&&(itdorJugador->getCartas()/3)!=0){
-        itdorJugador->setUnidadesInfanteria(itdorJugador->getUnidadesInfanteria()+(itdorJugador->getCartas()/3));
+        itdorJugador->setArmadas(itdorJugador->getArmadas()+(itdorJugador->getCartas()/3));
         itdorJugador->setCartas(0);
         flag=false;
         do{
@@ -546,13 +546,13 @@ int Risk::lanzarDado() {
      
             if(itdorP->getIDPais()==consolaPais&&itdorP->getColorOcupacion()==itdorJugador->getColor()){
                 flag=true;
-              if(itdorJugador->getUnidadesInfanteria()>0){
-                std::cout<<"Posee "<<itdorJugador->getUnidadesInfanteria()<<" Unidades de infanteria\n";
+              if(itdorJugador->getArmadas()>0){
+                std::cout<<"Posee "<<itdorJugador->getArmadas()<<" Unidades de infanteria\n";
                 std::cout<<"Ingrese la cantidad de infanterias que ingresara: ";
                 std::cin>>consola;
-                if(itdorJugador->getUnidadesInfanteria()>=consola){
+                if(itdorJugador->getArmadas()>=consola){
                  itdorP->setCantidadInfanterias(itdorP->getCantidadInfanterias()+consola);
-                  itdorJugador->setUnidadesInfanteria(itdorJugador->getUnidadesInfanteria()-consola);
+                  itdorJugador->setArmadas(itdorJugador->getArmadas()-consola);
                   system("clear");
                 std::cout<<"\nEl jugador "<< itdorJugador->getIdJugador()<<" agrego a "<<itdorP->getNombrePais()<<" "<< consola <<" Unidades"<<"!"<<std::endl;
                
