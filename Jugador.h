@@ -3,6 +3,7 @@
 #define JUGADOR_H
 
 #include <string>
+#include "Carta.h"
 
 //CLASE JUGADOR-------------------------
 class Jugador {
@@ -11,7 +12,7 @@ private:
     std::string nombre;
     int color;
     int armadas;
-    int cartas=0;
+    std::vector<Carta> cartasJugador;
     
 public:
     Jugador(int id, const std::string& nombre, int color, int unidadesInf)
@@ -41,15 +42,13 @@ public:
     void setArmadas(int armadas){
       armadas = armadas;
     }
-    
-    void setCartas(int ncartas){
-      cartas = ncartas;
+
+    std::vector<Carta>&  getCartasVector(){
+      return cartasJugador;
     }
 
-    int getCartas(){
-      return cartas;
-    }
-    
+    bool revisionCartas();
+
     void displayInfo();
 
 //------

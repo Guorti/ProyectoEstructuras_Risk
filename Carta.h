@@ -1,8 +1,7 @@
-// Cartas.h
+// Carta.h
 #ifndef CARTA_H
 #define CARTA_H
 
-#include <string>
 
 class Carta {
 private:
@@ -26,6 +25,8 @@ public:
     bool isComodin() {
         return comodin;
       }
+
+    void displayCartaInfo();
 
 };
 
