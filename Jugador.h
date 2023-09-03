@@ -39,8 +39,8 @@ public:
       return armadas;
     }
 
-    void setArmadas(int armadas){
-      armadas = armadas;
+    void setArmadas(int armies){
+      armadas = armies;
     }
 
     std::vector<Carta>&  getCartasVector(){

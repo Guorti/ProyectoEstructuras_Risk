@@ -206,7 +206,7 @@
 
    
     //42 iteraciones para agregar 1 infanteria en todos los paises
-    for(int i=0;i<42;i++){
+    for(int i=0;i<3;i++){
       do{
       contador=0;
       //std::cout<<"\nJugador "<<*itdorT <<" estos son los continentes"<<std::endl<<std::endl;
@@ -353,8 +353,8 @@ itdorJugadores=jugadores.begin();
             if(itdorP->getIDPais()==consolaPais&&itdorP->getColorOcupacion()==itdorJugadores->getColor()){
  
               if(itdorJugadores->getArmadas()>0){
-                std::cout<<"Posee "<<itdorJugadores->getArmadas()<<" Unidades de infanteria\n";
-                std::cout<<"Ingrese la cantidad de infanterias que ingresara: ";
+                std::cout<<"Posee "<<itdorJugadores->getArmadas()<<" Armadas\n";
+                std::cout<<"Ingrese la cantidad de armadas que ingresara: ";
                 std::cin>>consola;
                 if(itdorJugadores->getArmadas()>=consola){
                  itdorP->setCantidadArmadas(itdorP->getCantidadArmadas()+consola);
@@ -600,19 +600,17 @@ int Risk::generarAleatorio() {
     }while(flag2==false);
     if(flag==true){
         system("cls");
-        std::cout<<"Se le ha agregado 1 carta\n";
+        std::cout<<"\n\nSe le ha agregado 1 carta\n";
         //saca una carta del vector de cartas
         sacarCarta(itdorJugador);
     }
     
     
-    //fortificar 
-    
-    
+    //fortificar
     flag = false;
     flag2 =false;
      do{
-         std::cout<<"\n\n\nFORTIFICAR!"<<std::endl;
+         std::cout<<"\n\nFORTIFICAR!"<<std::endl;
         std::cout<<"\n\nA continuacion seleccione uno de sus territorios de donde quiere mover sus infanterias: ";
         itdorPaisSeleccion=seleccionDominio(itdorJugador);
         
@@ -720,12 +718,13 @@ int Risk::generarAleatorio() {
     if(cantidadDados==3){
       for(int i=0;i<cantidadDados;i++){
         dados.push_back(generarAleatorio());
-        // Se acomoda el tamaño para descartar el ultimo
-        dados.resize(1);
       }
     }
     // Se ordenan para tener los dos mayores datos (Chat gpt me lo recomendó, utiliza algo llamado introSort)
     std::sort(dados.begin(), dados.end(), std::greater<int>());
+    if(cantidadDados==3){
+        dados.resize(2);
+    }
 
     return dados;
 }
@@ -771,24 +770,26 @@ int Risk::generarAleatorio() {
       do{
         //Si el defensor tiene mas de 2 tropas en el territorio se usaran 2 dados
         if(defensorPais->getCantidadArmadas()>=2){
-          dadosRojos=dadosFunc(2);
+            dadosBlancos=dadosFunc(2);
         }else{
-          dadosRojos=dadosFunc(1);
+            dadosBlancos=dadosFunc(1);
         }
 
         //Si el atacante ataca con 3 armadas, se usaran 3 dados
-        if(atacantePais->getCantidadArmadas()==3){
+        if(tropasAtaque==3){
           dadosRojos=dadosFunc(3);
         }
-        if(atacantePais->getCantidadArmadas()==2){
+        if(tropasAtaque==2){
           dadosRojos=dadosFunc(2);
         }
-        if(atacantePais->getCantidadArmadas()==1){
+        if(tropasAtaque==1){
           dadosRojos=dadosFunc(1);
         }
 
           std::cout<<"Ronda: "<<ronda<<"\n";
           if(dadosRojos[0]>dadosBlancos[0]){
+              std::cout<<"RESULTADO DADOS ROJOS: "<<dadosRojos[0]<<"\n";
+              std::cout<<"RESULTADO DADOS BLANCOS: "<<dadosBlancos[0]<<"\n";
               //reduzco ejercito del defensor
               defensorPais->setCantidadArmadas(defensorPais->getCantidadArmadas()-1);
               std::cout<<"Dados Rojos: "<<dadosRojos[0]<<"\n";
@@ -797,14 +798,22 @@ int Risk::generarAleatorio() {
               std::cout<<"Tropas Atacante: "<<tropasAtaque<<"\n";
               std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadArmadas()<<"\n\n";
               if(tropasAtaque>1&&defensorPais->getCantidadArmadas()>1){
-                if(dadosRojos[1]>dadosBlancos[1]){
+                if(dadosRojos[1]<=dadosBlancos[1]){
                   //reduzco ejercito del atacante
-                  defensorPais->setCantidadArmadas(defensorPais->getCantidadArmadas()-1);
+                  tropasAtaque=tropasAtaque-1;
                   std::cout<<"Dados Rojos: "<<dadosRojos[1]<<"\n";
                   std::cout<<"Dados Blancos: "<<dadosBlancos[1]<<"\n";
-                  std::cout<<"Gana Atacante.\n";
+                  std::cout<<"Gana Defensor.\n";
                   std::cout<<"Tropas Atacante: "<<tropasAtaque<<"\n";
                   std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadArmadas()<<"\n\n";
+                }else{
+                    //reduzco ejercito del defensor
+                    defensorPais->setCantidadArmadas(defensorPais->getCantidadArmadas()-1);
+                    std::cout<<"Dados Rojos: "<<dadosRojos[1]<<"\n";
+                    std::cout<<"Dados Blancos: "<<dadosBlancos[1]<<"\n";
+                    std::cout<<"Gana Atacante.\n";
+                    std::cout<<"Tropas Atacante: "<<tropasAtaque<<"\n";
+                    std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadArmadas()<<"\n\n";
                 }
               }
           }
@@ -825,6 +834,14 @@ int Risk::generarAleatorio() {
                   std::cout<<"Gana Defensor.\n";
                   std::cout<<"Tropas Atacante: "<<tropasAtaque<<"\n";
                   std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadArmadas()<<"\n\n";
+                }else{
+                    //reduzco ejercito del defensor
+                    defensorPais->setCantidadArmadas(defensorPais->getCantidadArmadas()-1);
+                    std::cout<<"Dados Rojos: "<<dadosRojos[1]<<"\n";
+                    std::cout<<"Dados Blancos: "<<dadosBlancos[1]<<"\n";
+                    std::cout<<"Gana Atacante.\n";
+                    std::cout<<"Tropas Atacante: "<<tropasAtaque<<"\n";
+                    std::cout<<"Tropas Defensor: "<<defensorPais->getCantidadArmadas()<<"\n\n";
                 }
               }
               
@@ -865,6 +882,9 @@ int Risk::generarAleatorio() {
               atacantePais->setCantidadArmadas(atacantePais->getCantidadArmadas()+tropasAtaque);
               flagOpcion=true;
               flag=true;
+            }else{
+                flagOpcion=true;
+                flag=false;
             }
           }while(flagOpcion==false);
           

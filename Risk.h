@@ -6,7 +6,7 @@
 #include "Carta.h"
 
 class Risk {
-    
+
 private:
     std::list<Continente> continentes;
     std::list<Jugador> jugadores;
@@ -16,7 +16,7 @@ private:
 public:
     bool inicio_J = false;
     bool j_Terminado = false;
-    
+
     void inicializar();
     int generarAleatorio();
     void turno(int turno);
@@ -28,9 +28,9 @@ public:
     std::list<Pais>::iterator seleccionDominio(std::list<Jugador>::iterator itdorJugador);
     int contadorTerritorios(std::list<Jugador>::iterator itdorJugador);
     void sacarCarta(std::list<Jugador>::iterator itdorJugador);
-    
-    
-    
+
+
+
 };
 
 #include "Risk.hxx"
