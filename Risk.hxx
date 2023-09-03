@@ -119,7 +119,10 @@
       return;
     }
 
- 
+    //Se revuelven la cartas (Funcion dada por gpt)
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    std::shuffle(cartas.begin(), cartas.end(),rng);
    
     for(int i=1;i<cantidadJugadores+1;i++){
       flag=false;
@@ -133,7 +136,7 @@
      
 
       do{
-        for (std::list<int>::iterator itdor = coloresList.begin(); itdor != coloresList.end();       ++itdor){
+        for (std::list<int>::iterator itdor = coloresList.begin(); itdor != coloresList.end(); ++itdor){
           if(*itdor==1){
             std::cout<<"1.- Verde"<<std::endl;
           }
@@ -386,8 +389,12 @@ itdorJugadores=jugadores.begin();
     return;
   }
 
+void Risk::sacarCarta(std::list<Jugador>::iterator itdorJugador) {
+    itdorJugador->getCartasVector().push_back(*cartas.begin());
+    cartas.begin()->displayCartaInfo();
+    cartas.erase(cartas.begin());
+}
 
- //----------------------------------------
 
 
 
@@ -594,7 +601,8 @@ int Risk::generarAleatorio() {
     if(flag==true){
         system("cls");
         std::cout<<"Se le ha agregado 1 carta\n";
-        //saca una carta de la pila de cartas
+        //saca una carta del vector de cartas
+        sacarCarta(itdorJugador);
     }
     
     

@@ -10,7 +10,7 @@ class Risk {
 private:
     std::list<Continente> continentes;
     std::list<Jugador> jugadores;
-    std::list<Carta> cartas;
+    std::vector<Carta> cartas;
     int turnoPartida=-1;
 
 public:
@@ -27,6 +27,7 @@ public:
     std::list<Pais>::iterator seleccionTerrenoColindanteEnemigo(std::list<Pais>::iterator itdorDominio);
     std::list<Pais>::iterator seleccionDominio(std::list<Jugador>::iterator itdorJugador);
     int contadorTerritorios(std::list<Jugador>::iterator itdorJugador);
+    void sacarCarta(std::list<Jugador>::iterator itdorJugador);
     
     
     
