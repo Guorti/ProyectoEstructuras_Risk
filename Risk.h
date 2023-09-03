@@ -12,7 +12,7 @@ private:
     std::list<Jugador> jugadores;
     std::vector<Carta> cartas;
     int turnoPartida=-1;
-    int reclamoCartas=0;
+    int reclamoCartas=2;
 
 public:
     bool inicio_J = false;

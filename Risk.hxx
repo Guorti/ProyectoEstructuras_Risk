@@ -420,6 +420,7 @@ int Risk::generarAleatorio() {
       int opcionAtacar;
       int opcionFortificar;
       int consola;
+      int cartasRecibidas=0;
       bool flag;
       bool flag2;
       std::list<Jugador>::iterator itdorJugador;
@@ -507,6 +508,7 @@ int Risk::generarAleatorio() {
 
         std::cout<<"El Jugador "<<itdorJugador->getIdJugador()<<" puede reclamar: "<< reclamoCartas <<" Fichas debido a sus cartas\n";
         std::cout<<"Desea reclamarlas? (1)SI (2)NO\n";
+        std::cin>>opcion;
         if(opcion==1){
             itdorJugador->setArmadas(itdorJugador->getArmadas()+reclamoCartas);
             reclamoCartas=reclamoCartas+2;
@@ -532,7 +534,7 @@ int Risk::generarAleatorio() {
         std::cout<<"\n\n\nATACAR!"<<std::endl;
         std::cout<<"A continuacion seleccione uno de sus dominios por el cual atacar\n";
         itdorPaisSeleccion=seleccionDominio(itdorJugador);
-        flag = ataquePais(itdorPaisSeleccion, seleccionTerrenoColindanteEnemigo(itdorPaisSeleccion));
+        cartasRecibidas =cartasRecibidas + ataquePais(itdorPaisSeleccion, seleccionTerrenoColindanteEnemigo(itdorPaisSeleccion));
         std::cout<<"Desea dejar de atacar? (1) Si - (0) No"<<std::endl;
             std::cin>>opcionAtacar; 
             
@@ -542,11 +544,14 @@ int Risk::generarAleatorio() {
                 flag2 = false;
             }
     }while(flag2==false);
-    if(flag==true){
+    if(cartasRecibidas>=1){
         system("cls");
-        std::cout<<"\n\nSe le ha agregado 1 carta\n";
+        for(int i=0;i<cartasRecibidas;i++){
+            sacarCarta(itdorJugador);
+        }
+
+        std::cout<<"\n\nSe le han agregado "<< cartasRecibidas <<" cartas\n";
         //saca una carta del vector de cartas
-        sacarCarta(itdorJugador);
     }
     
     
@@ -683,6 +688,8 @@ int Risk::generarAleatorio() {
       bool flag;
       bool flagAux;
       bool flagOpcion;
+     int ronda=0;
+     int opcionSeleccion;
       
       if(atacantePais->getIDPais()==defensorPais->getIDPais()){
            return 0;
@@ -709,8 +716,7 @@ int Risk::generarAleatorio() {
       flag=false;
       flagAux=false;
       flagOpcion=false;
-      int ronda=0;
-      int opcionSeleccion;
+
       do{
         //Si el defensor tiene mas de 2 tropas en el territorio se usaran 2 dados
         if(defensorPais->getCantidadArmadas()>=2){
@@ -731,7 +737,7 @@ int Risk::generarAleatorio() {
         }
 
           std::cout<<"Ronda: "<<ronda<<"\n";
-          if(dadosRojos[0]>dadosBlancos[0]){
+          if(dadosRojos[0]>dadosBlancos[0]&&defensorPais->getCantidadArmadas()>0){
               //reduzco ejercito del defensor
               defensorPais->setCantidadArmadas(defensorPais->getCantidadArmadas()-1);
               std::cout<<"Dados Rojos: "<<dadosRojos[0]<<"\n";
@@ -759,7 +765,7 @@ int Risk::generarAleatorio() {
                 }
               }
           }
-          if(dadosRojos[0]<=dadosBlancos[0]){
+          if(dadosRojos[0]<=dadosBlancos[0]&&defensorPais->getCantidadArmadas()>0){
               //reduzco ejercito del atacante
               tropasAtaque=tropasAtaque-1;
               std::cout<<"Dados Rojos: "<<dadosRojos[0]<<"\n";
@@ -803,6 +809,7 @@ int Risk::generarAleatorio() {
                   else{
                       flagAux=true;
                       defensorPais->setColorOcupacion(atacantePais->getColorOcupacion());
+                      atacantePais->setCantidadArmadas(atacantePais->getCantidadArmadas()-opcion);
                       defensorPais->setCantidadArmadas(opcion);
                       return 1;
                   }
@@ -824,10 +831,10 @@ int Risk::generarAleatorio() {
               std::cout<<"Sus "<<tropasAtaque<<" han regresado satisfactoriamente\n";
               atacantePais->setCantidadArmadas(atacantePais->getCantidadArmadas()+tropasAtaque);
               flagOpcion=true;
-              flag=false;
+              flag=true;
             }else{
                 flagOpcion=true;
-                flag=true;
+                flag=false;
             }
           }while(flagOpcion==false);
           
