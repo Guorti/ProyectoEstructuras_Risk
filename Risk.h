@@ -2,12 +2,16 @@
 #ifndef RISK_H
 #define RISK_H
 
+//No se halló razon del porque se tuvo que utilizar in include con la clase Carta, sin ello falla
+#include "Carta.h"
+
 class Risk {
     
 private:
     std::list<Continente> continentes;
-  std::list<Jugador> jugadores;
-  int turnoPartida=-1;
+    std::list<Jugador> jugadores;
+    std::list<Carta> cartas;
+    int turnoPartida=-1;
 
 public:
     bool inicio_J = false;

@@ -17,6 +17,22 @@
     int consolaContinente;
     int consolaPais;
 
+      //Quemamos las cartas a utilizar
+
+      cartas.push_back(Carta("Comodin",0,1)); cartas.push_back(Carta("Comodin",0,1));
+
+      cartas.push_back(Carta("Caballeria", 1, 0));cartas.push_back(Carta("Infanteria", 2, 0));cartas.push_back(Carta("Artilleria", 3, 0));cartas.push_back(Carta("Caballeria", 4, 0));
+      cartas.push_back(Carta("Artilleria", 5, 0));cartas.push_back(Carta("Infanteria", 6, 0));cartas.push_back(Carta("Infanteria", 7, 0));cartas.push_back(Carta("Caballeria", 8, 0));
+      cartas.push_back(Carta("Caballeria", 9, 0));cartas.push_back(Carta("Artilleria", 10, 0));cartas.push_back(Carta("Infanteria", 11, 0));cartas.push_back(Carta("Caballeria", 12, 0));
+      cartas.push_back(Carta("Artilleria", 13, 0));cartas.push_back(Carta("Infanteria", 14, 0));cartas.push_back(Carta("Infanteria", 15, 0));cartas.push_back(Carta("Artilleria", 16, 0));
+      cartas.push_back(Carta("Artilleria", 17, 0));cartas.push_back(Carta("Infanteria", 18, 0));cartas.push_back(Carta("Caballeria", 19, 0));cartas.push_back(Carta("Caballeria", 20, 0));
+      cartas.push_back(Carta("Caballeria", 21, 0));cartas.push_back(Carta("Artilleria", 22, 0));cartas.push_back(Carta("Infanteria", 23, 0));cartas.push_back(Carta("Caballeria", 24, 0));
+      cartas.push_back(Carta("Caballeria", 25, 0));cartas.push_back(Carta("Infanteria", 26, 0));cartas.push_back(Carta("Infanteria", 27, 0));cartas.push_back(Carta("Caballeria", 28, 0));
+      cartas.push_back(Carta("Infanteria", 29, 0));cartas.push_back(Carta("Artilleria", 30, 0));cartas.push_back(Carta("Infanteria", 31, 0));cartas.push_back(Carta("Artilleria", 32, 0));
+      cartas.push_back(Carta("Artilleria", 33, 0));cartas.push_back(Carta("Artilleria", 34, 0));cartas.push_back(Carta("Infanteria", 35, 0));cartas.push_back(Carta("Caballeria", 36, 0));
+      cartas.push_back(Carta("Artilleria", 37, 0));cartas.push_back(Carta("Caballeria", 38, 0));cartas.push_back(Carta("Artilleria", 39, 0));cartas.push_back(Carta("Caballeria", 40, 0));
+      cartas.push_back(Carta("Caballeria", 41, 0));cartas.push_back(Carta("Infanteria", 42, 0));
+
 
     continentes.push_back(
         Continente(0, "America del Norte", {
