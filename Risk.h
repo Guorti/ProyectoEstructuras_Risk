@@ -12,6 +12,7 @@ private:
     std::list<Jugador> jugadores;
     std::vector<Carta> cartas;
     int turnoPartida=-1;
+    int reclamoCartas=0;
 
 public:
     bool inicio_J = false;
@@ -28,6 +29,7 @@ public:
     std::list<Pais>::iterator seleccionDominio(std::list<Jugador>::iterator itdorJugador);
     int contadorTerritorios(std::list<Jugador>::iterator itdorJugador);
     void sacarCarta(std::list<Jugador>::iterator itdorJugador);
+    void ingresarTropas(std::list<Jugador>::iterator itdorJugador);
 
 
 

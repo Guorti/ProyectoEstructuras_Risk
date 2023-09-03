@@ -17,6 +17,7 @@
     int consolaContinente;
     int consolaPais;
 
+
       //Quemamos las cartas a utilizar
 
       cartas.push_back(Carta("Comodin",0,1)); cartas.push_back(Carta("Comodin",0,1));
@@ -424,6 +425,7 @@ int Risk::generarAleatorio() {
       std::list<Jugador>::iterator itdorJugador;
       std::list<Pais>::iterator itdorPaisSeleccion;
       int turnoFinal;
+
       
       int paisesJugador;
    
@@ -494,91 +496,33 @@ int Risk::generarAleatorio() {
           }
       }
     }
-    if(paisesJugador==6){
+    if(paisesJugador==42){
         j_Terminado=true;
         std::cout<<"El jugador "<<itdorJugador->getNombre()<<" Ha ganado\n";
         return;
     }
+
+    //Para reclamar cartas y subir tal cantidad
+    if(itdorJugador->revisionCartas()){
+
+        std::cout<<"El Jugador "<<itdorJugador->getIdJugador()<<" puede reclamar: "<< reclamoCartas <<" Fichas debido a sus cartas\n";
+        std::cout<<"Desea reclamarlas? (1)SI (2)NO\n";
+        if(opcion==1){
+            itdorJugador->setArmadas(itdorJugador->getArmadas()+reclamoCartas);
+            reclamoCartas=reclamoCartas+2;
+            ingresarTropas(itdorJugador);
+        }
+    }
+
+
     
    
-    std::cout<<"El Jugador "<<itdorJugador->getIdJugador()<<" puede reclamar: "<<(contadorTerritorios(itdorJugador)/3)<<" Fichas\n";
+    std::cout<<"El Jugador "<<itdorJugador->getIdJugador()<<" puede reclamar: "<<(contadorTerritorios(itdorJugador)/3)<<" Fichas debido a sus territorios\n";
     std::cout<<"Desea reclamarlas (1) SI (2)NO\n";
     std::cin>>opcion;
     if(opcion==1&&(contadorTerritorios(itdorJugador)/3)!=0){
         itdorJugador->setArmadas(itdorJugador->getArmadas()+(contadorTerritorios(itdorJugador)/3));
-        flag=false;
-        do{
-      //MUESTRA TERRENOS DONDE TIENE DOMINIOS
-   
-
-    std::cout<<"\nJugador "<<itdorJugador->getIdJugador()<<" estos son sus territorios\n"<<std::endl;
-    for (std::list<Continente>::iterator itdorCont = continentes.begin(); itdorCont != continentes.end();++itdorCont) {
-      for (std::list<Pais>::iterator itdorP = (itdorCont->getPaisesList().begin()); itdorP != itdorCont->getPaisesList().end();++itdorP) {
-        if(itdorP->getColorOcupacion()==itdorJugador->getColor()){
-          std::cout<<"("<<itdorCont->getIdContinente()<<") "<<itdorCont->getNombreContinente()<<"\n";
-          break;
-        }
-      }
-    }
-
-      std::cout<<"\nDigite alguno de los continentes: ";
-      std::cin>>consolaContinente;
-      std::cout<<std::endl;
-   
-    system("cls");
-
-      if(consolaContinente == 0){
-        std::cout<<"AMERICA DEL NORTE"<<std::endl<<std::endl;
-      }else  if(consolaContinente == 1){
-        std::cout<<"EUROPA"<<std::endl<<std::endl;
-      }else  if(consolaContinente == 2){
-        std::cout<<"ASIA"<<std::endl<<std::endl;
-      }else  if(consolaContinente == 3){
-        std::cout<<"AMERICA DEL SUR"<<std::endl<<std::endl;
-      }else  if(consolaContinente == 4){
-        std::cout<<"AFRICA"<<std::endl<<std::endl;
-      }else  if(consolaContinente == 5){
-        std::cout<<"AUSTRALIA"<<std::endl<<std::endl;
-      }
-
-    for (std::list<Continente>::iterator itdorCont = continentes.begin(); itdorCont != continentes.end();++itdorCont) {
-       
-        if(itdorCont->getIdContinente()==consolaContinente){
-          for (std::list<Pais>::iterator itdorP = (itdorCont->getPaisesList().begin()); itdorP != itdorCont->getPaisesList().end();++itdorP) {
-            if(itdorP->getColorOcupacion()==itdorJugador->getColor()){
-              itdorP->getInfoPais();
-            }
-          }
-          flag=false;
-          std::cout<<"Si no puede ver ningun país disponible para ocupar, inserte cualquier numero para volver al menu de continentes"<<std::endl;
-          std::cout<<"Digite el pais que desea ocupar: ";
-          std::cin>>consolaPais;
-          //Funcion dentro de continente que itere sobre la lista de paises hasta que encuentre el
-          //seleccionado por el usuario y modofique los datos respectivos
-         
-          for (std::list<Pais>::iterator itdorP = (itdorCont->getPaisesList().begin()); itdorP != itdorCont->getPaisesList().end();++itdorP) {
-     
-            if(itdorP->getIDPais()==consolaPais&&itdorP->getColorOcupacion()==itdorJugador->getColor()){
-                flag=true;
-              if(itdorJugador->getArmadas()>0){
-                std::cout<<"Posee "<<itdorJugador->getArmadas()<<" Unidades de infanteria\n";
-                std::cout<<"Ingrese la cantidad de infanterias que ingresara: ";
-                std::cin>>consola;
-                if(itdorJugador->getArmadas()>=consola){
-                 itdorP->setCantidadArmadas(itdorP->getCantidadArmadas()+consola);
-                  itdorJugador->setArmadas(itdorJugador->getArmadas()-consola);
-                  system("clear");
-                std::cout<<"\nEl jugador "<< itdorJugador->getIdJugador()<<" agrego a "<<itdorP->getNombrePais()<<" "<< consola <<" Unidades"<<"!"<<std::endl;
-               
-                }else{
-                    flag=false;
-                }
-              }
-            }
-        }
-      }
-    }
-        }while(flag==false);
+        ingresarTropas(itdorJugador);
     }
    
    
@@ -592,7 +536,7 @@ int Risk::generarAleatorio() {
         std::cout<<"Desea dejar de atacar? (1) Si - (0) No"<<std::endl;
             std::cin>>opcionAtacar; 
             
-            if(opcionAtacar = 1){
+            if(opcionAtacar == 1){
                 flag2 = true;
             }else{
                 flag2 = false;
@@ -788,8 +732,6 @@ int Risk::generarAleatorio() {
 
           std::cout<<"Ronda: "<<ronda<<"\n";
           if(dadosRojos[0]>dadosBlancos[0]){
-              std::cout<<"RESULTADO DADOS ROJOS: "<<dadosRojos[0]<<"\n";
-              std::cout<<"RESULTADO DADOS BLANCOS: "<<dadosBlancos[0]<<"\n";
               //reduzco ejercito del defensor
               defensorPais->setCantidadArmadas(defensorPais->getCantidadArmadas()-1);
               std::cout<<"Dados Rojos: "<<dadosRojos[0]<<"\n";
@@ -872,6 +814,7 @@ int Risk::generarAleatorio() {
               std::cout<<"Usted ha perdido la batalla contra "<<defensorPais->getNombrePais()<<"\n";
               atacantePais->setCantidadArmadas(atacantePais->getCantidadArmadas()+tropasAtaque);
               flag=true;
+              return 0;
           }
 
           do{
@@ -881,10 +824,10 @@ int Risk::generarAleatorio() {
               std::cout<<"Sus "<<tropasAtaque<<" han regresado satisfactoriamente\n";
               atacantePais->setCantidadArmadas(atacantePais->getCantidadArmadas()+tropasAtaque);
               flagOpcion=true;
-              flag=true;
+              flag=false;
             }else{
                 flagOpcion=true;
-                flag=false;
+                flag=true;
             }
           }while(flagOpcion==false);
           
@@ -894,6 +837,85 @@ int Risk::generarAleatorio() {
      return 0;
      
   }
+
+void Risk::ingresarTropas(std::list<Jugador>::iterator itdorJugador) {
+    int flag=false;
+    int consolaContinente;
+    int consolaPais;
+    int consola;
+    do{
+        //MUESTRA TERRENOS DONDE TIENE DOMINIOS
+
+
+        std::cout<<"\nJugador "<<itdorJugador->getIdJugador()<<" estos son sus territorios\n"<<std::endl;
+        for (std::list<Continente>::iterator itdorCont = continentes.begin(); itdorCont != continentes.end();++itdorCont) {
+            for (std::list<Pais>::iterator itdorP = (itdorCont->getPaisesList().begin()); itdorP != itdorCont->getPaisesList().end();++itdorP) {
+                if(itdorP->getColorOcupacion()==itdorJugador->getColor()){
+                    std::cout<<"("<<itdorCont->getIdContinente()<<") "<<itdorCont->getNombreContinente()<<"\n";
+                    break;
+                }
+            }
+        }
+
+        std::cout<<"\nDigite alguno de los continentes: ";
+        std::cin>>consolaContinente;
+        std::cout<<std::endl;
+
+        system("cls");
+
+        if(consolaContinente == 0){
+            std::cout<<"AMERICA DEL NORTE"<<std::endl<<std::endl;
+        }else  if(consolaContinente == 1){
+            std::cout<<"EUROPA"<<std::endl<<std::endl;
+        }else  if(consolaContinente == 2){
+            std::cout<<"ASIA"<<std::endl<<std::endl;
+        }else  if(consolaContinente == 3){
+            std::cout<<"AMERICA DEL SUR"<<std::endl<<std::endl;
+        }else  if(consolaContinente == 4){
+            std::cout<<"AFRICA"<<std::endl<<std::endl;
+        }else  if(consolaContinente == 5){
+            std::cout<<"AUSTRALIA"<<std::endl<<std::endl;
+        }
+
+        for (std::list<Continente>::iterator itdorCont = continentes.begin(); itdorCont != continentes.end();++itdorCont) {
+
+            if(itdorCont->getIdContinente()==consolaContinente){
+                for (std::list<Pais>::iterator itdorP = (itdorCont->getPaisesList().begin()); itdorP != itdorCont->getPaisesList().end();++itdorP) {
+                    if(itdorP->getColorOcupacion()==itdorJugador->getColor()){
+                        itdorP->getInfoPais();
+                    }
+                }
+                flag=false;
+                std::cout<<"Si no puede ver ningun país disponible para ocupar, inserte cualquier numero para volver al menu de continentes"<<std::endl;
+                std::cout<<"Digite el pais que desea ocupar: ";
+                std::cin>>consolaPais;
+                //Funcion dentro de continente que itere sobre la lista de paises hasta que encuentre el
+                //seleccionado por el usuario y modofique los datos respectivos
+
+                for (std::list<Pais>::iterator itdorP = (itdorCont->getPaisesList().begin()); itdorP != itdorCont->getPaisesList().end();++itdorP) {
+
+                    if(itdorP->getIDPais()==consolaPais&&itdorP->getColorOcupacion()==itdorJugador->getColor()){
+                        flag=true;
+                        if(itdorJugador->getArmadas()>0){
+                            std::cout<<"Posee "<<itdorJugador->getArmadas()<<" Unidades de infanteria\n";
+                            std::cout<<"Ingrese la cantidad de infanterias que ingresara: ";
+                            std::cin>>consola;
+                            if(itdorJugador->getArmadas()>=consola){
+                                itdorP->setCantidadArmadas(itdorP->getCantidadArmadas()+consola);
+                                itdorJugador->setArmadas(itdorJugador->getArmadas()-consola);
+                                system("clear");
+                                std::cout<<"\nEl jugador "<< itdorJugador->getIdJugador()<<" agrego a "<<itdorP->getNombrePais()<<" "<< consola <<" Unidades"<<"!"<<std::endl;
+
+                            }else{
+                                flag=false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }while(flag==false);
+}
   
   
   std::list<Pais>::iterator Risk::seleccionTerrenoColindante(std::list<Pais>::iterator itdorDominio) {

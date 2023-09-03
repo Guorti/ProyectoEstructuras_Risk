@@ -14,6 +14,7 @@ void Carta::displayCartaInfo() {
     }
 
 
+
 }
   
 
