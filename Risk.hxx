@@ -160,7 +160,7 @@
       for (std::list<int>::iterator itdor = coloresList.begin(); itdor != coloresList.end(); ++itdor) {
         if (*itdor == opcionColor) {
           flag=true;
-          itdor = coloresList.erase(itdor);  // erase returns the next valid iterator
+          itdor = coloresList.erase(itdor);
         }
       }
         if(flag==false){
@@ -170,31 +170,26 @@
 
       if(cantidadJugadores==3){
         turnosJugadores = {1, 2, 3};
-        cantidadFichas=35;
         jugadores.push_back(Jugador(i,nombre,opcionColor,35));
        
       }
       if(cantidadJugadores==4){
         turnosJugadores = {1, 2, 3, 4};
-        cantidadFichas=30;
         jugadores.push_back(Jugador(i,nombre,opcionColor,30));
        
       }
       if(cantidadJugadores==5){
         turnosJugadores = {1, 2, 3, 4, 5};
-        cantidadFichas=25;
         jugadores.push_back(Jugador(i,nombre,opcionColor,25));
        
       }
       if(cantidadJugadores==6){
         turnosJugadores = {1, 2, 3, 4, 5, 6};
-        cantidadFichas=20;
         jugadores.push_back(Jugador(i,nombre,opcionColor,20));
        
       }
     }
 
-    //MOSTRAR LA INTERFAZ PARA ELEGIR DONDE PONER INFANTERIA
 
     system("cls");
 
@@ -258,23 +253,20 @@
               flag=true;
               if(itdorP->getCantidadArmadas()==0){
 
-             
-               
                 itdorP->setColorOcupacion(itdorJugadores->getColor());
                 itdorP->setCantidadArmadas(itdorP->getCantidadArmadas()+1);
                 itdorJugadores->setArmadas(itdorJugadores->getArmadas()-1);
 
                 system("cls");
                 std::cout<<"\nEl jugador "<< itdorJugadores->getIdJugador()<<" reclamo el territorio "<<itdorP->getNombrePais()<<"!"<<std::endl;
-                itdorJugadores->setCartas(itdorJugadores->getCartas()+1);
                
-
+                //Se realiza para ir al siguiente turno
                 if(itdorJugadores->getIdJugador()==jugadores.end()->getIdJugador()){
                   itdorJugadores=jugadores.begin();
                 }else{
                   itdorJugadores++;
                 }
-              }else{
+              }else if(itdorP->getColorOcupacion()!=0){
                  system("cls");
                 std::cout<<"El territorio "<<itdorP->getNombrePais()<<" ya fue reclamado por el color "<<itdorP->getColorOcupacion()<<std::endl;
                 flag=false;                
@@ -301,8 +293,6 @@
 
 int flagAux=false;
 int consola;
-
-    //---*
 
 //CAMBIARLO POR LA CANTIDAD TOTAL DE TROPAS
 itdorJugadores=jugadores.begin();
@@ -409,6 +399,8 @@ int Risk::generarAleatorio() {
     return (std::rand() % 6) + 1;
 
 }
+
+
 //--------------------------------
 
 //TURNO -------------------------------
@@ -502,12 +494,11 @@ int Risk::generarAleatorio() {
     }
     
    
-    std::cout<<"El Jugador "<<itdorJugador->getIdJugador()<<" puede reclamar: "<<(itdorJugador->getCartas()/3)<<" Fichas\n";
+    std::cout<<"El Jugador "<<itdorJugador->getIdJugador()<<" puede reclamar: "<<(contadorTerritorios(itdorJugador)/3)<<" Fichas\n";
     std::cout<<"Desea reclamarlas (1) SI (2)NO\n";
     std::cin>>opcion;
-    if(opcion==1&&(itdorJugador->getCartas()/3)!=0){
-        itdorJugador->setArmadas(itdorJugador->getArmadas()+(itdorJugador->getCartas()/3));
-        itdorJugador->setCartas(0);
+    if(opcion==1&&(contadorTerritorios(itdorJugador)/3)!=0){
+        itdorJugador->setArmadas(itdorJugador->getArmadas()+(contadorTerritorios(itdorJugador)/3));
         flag=false;
         do{
       //MUESTRA TERRENOS DONDE TIENE DOMINIOS
@@ -603,7 +594,7 @@ int Risk::generarAleatorio() {
     if(flag==true){
         system("cls");
         std::cout<<"Se le ha agregado 1 carta\n";
-        itdorJugador->setCartas(itdorJugador->getCartas()+1);
+        //saca una carta de la pila de cartas
     }
     
     
@@ -693,6 +684,18 @@ int Risk::generarAleatorio() {
         }
     return 0;
    }
+
+   int Risk::contadorTerritorios(std::list<Jugador>::iterator itdorJugador){
+    int contador=0;
+       for (std::list<Continente>::iterator itdorCont = continentes.begin(); itdorCont != continentes.end();++itdorCont) {
+           for (std::list<Pais>::iterator itdorP = (itdorCont->getPaisesList().begin()); itdorP != itdorCont->getPaisesList().end();++itdorP) {
+               if(itdorJugador->getColor()==itdorP->getColorOcupacion()){
+                   contador++;
+               }
+           }
+       }
+    return contador;
+    }
 
  
   std::vector<int> Risk::dadosFunc(int cantidadDados) {

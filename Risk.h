@@ -26,6 +26,7 @@ public:
     std::list<Pais>::iterator seleccionTerrenoColindante(std::list<Pais>::iterator itdorDominio);
     std::list<Pais>::iterator seleccionTerrenoColindanteEnemigo(std::list<Pais>::iterator itdorDominio);
     std::list<Pais>::iterator seleccionDominio(std::list<Jugador>::iterator itdorJugador);
+    int contadorTerritorios(std::list<Jugador>::iterator itdorJugador);
     
     
     
