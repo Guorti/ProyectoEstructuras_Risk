@@ -207,7 +207,7 @@
 
    
     //42 iteraciones para agregar 1 infanteria en todos los paises
-    for(int i=0;i<3;i++){
+    for(int i=0;i<42;i++){
       do{
       contador=0;
       //std::cout<<"\nJugador "<<*itdorT <<" estos son los continentes"<<std::endl<<std::endl;
