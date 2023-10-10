@@ -4,10 +4,15 @@
 
 //No se halló razon del porque se tuvo que utilizar in include con la clase Carta, sin ello falla
 #include "Carta.h"
+#include <string>
 
 class Risk {
 
 private:
+
+    int cantidadJugadores;
+    std::list<int> turnosJugadores;
+
     std::list<Continente> continentes;
     std::list<Jugador> jugadores;
     std::vector<Carta> cartas;
@@ -30,6 +35,12 @@ public:
     int contadorTerritorios(std::list<Jugador>::iterator itdorJugador);
     void sacarCarta(std::list<Jugador>::iterator itdorJugador);
     void ingresarTropas(std::list<Jugador>::iterator itdorJugador);
+    void guardarPartida(std::string nombreArchivo);
+
+    std::list<int> getTurnosJugadores();
+    std::list<Jugador> getJugadoresList();
+
+    std::string allDataToString();
 
 
 

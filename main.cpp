@@ -1,5 +1,6 @@
 #include <iostream>
 #include <list>
+#include <random>
 #include <string>
 #include <vector>
 #include <ctime>
@@ -19,6 +20,7 @@ std::string consola;
 
 
 int main() {
+
 
     srand(time(NULL));
 
@@ -113,6 +115,7 @@ Risk1.turno(numeroTurno);
         }else if(consola =="salir"){
            
         }else if(consola=="guardar"){
+           Risk1.allDataToString();
             std::cout<<"Comando exitoso!"<<std::endl;
         }else if(consola =="inicializar"){
             if(Risk1.inicio_J == false){

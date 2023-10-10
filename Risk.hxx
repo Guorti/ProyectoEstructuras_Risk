@@ -2,18 +2,53 @@
 #define RISK_HXX
 
 #include "Risk.h"
+#include <fstream>
+using namespace std;
+
+
+//Getters
+std::list<int> Risk::getTurnosJugadores(){
+    return turnosJugadores;
+}
+
+std::list<Jugador> Risk::getJugadoresList(){
+    return jugadores;
+}
+
+
+
+void Risk::guardarPartida(string nombreArchivo){
+
+      // Open a file named "output.txt" for writing
+      std::ofstream outputFile(nombreArchivo + ".txt");
+
+      // Check if the file is successfully opened
+      if (outputFile.is_open()) {
+          // Declare a variable
+          int number = 42;
+
+          // Write the variable to the file
+          outputFile << "The value of the variable is: " << number;
+
+          // Close the file
+          outputFile.close();
+
+          std::cout << "Data has been written to the file." << std::endl;
+      }else {
+          std::cout << "Failed to open the file." << std::endl;
+      }
+}
+
 
 
   void Risk::inicializar(){
-    int cantidadJugadores;
-    int cantidadFichas;
+
     bool flag;
     std::string nombre;
     int color;
     int opcionColor=0;
     std::list<int> coloresList = {1, 2, 3, 4, 5, 6};
     int contador=0;
-    std::list<int> turnosJugadores;
     int consolaContinente;
     int consolaPais;
 
@@ -207,7 +242,7 @@
 
    
     //42 iteraciones para agregar 1 infanteria en todos los paises
-    for(int i=0;i<42;i++){
+    for(int i=0;i<3;i++){
       do{
       contador=0;
       //std::cout<<"\nJugador "<<*itdorT <<" estos son los continentes"<<std::endl<<std::endl;
@@ -615,7 +650,6 @@ int Risk::generarAleatorio() {
             
             
         primerPais->setCantidadArmadas(primerPais->getCantidadArmadas()-cantidad);
-        
         segundoPais -> setCantidadArmadas(segundoPais->getCantidadArmadas()+cantidad);
         
         system("cls");
@@ -1080,5 +1114,40 @@ void Risk::ingresarTropas(std::list<Jugador>::iterator itdorJugador) {
     } while (flag == false);
     return aux;
   }
+
+string Risk::allDataToString(){
+
+    string returnString;
+
+    returnString.append("turnosJugadores:\n");
+    for (std::list<int>::iterator itdor = getTurnosJugadores().begin(); itdor != getTurnosJugadores().end();++itdor) {
+        returnString.append(to_string(*itdor));
+        if(itdor != getTurnosJugadores().end()){
+            returnString.append(";");
+        }
+    }
+    returnString.append("\n");
+
+    returnString.append("atributosJugadores:\n");
+    for (std::list<Jugador>::iterator itdor = getJugadoresList().begin(); itdor != getJugadoresList().end();++itdor) {
+        returnString.append(to_string(itdor->getIdJugador()) + ";");
+        returnString.append(itdor->getNombre() + ";");
+        returnString.append(to_string(itdor->getColor()) + ";");
+        returnString.append(to_string(itdor->getArmadas()));
+        if(itdor != getJugadoresList().end()){
+            returnString.append("\n");
+        }
+    }
+
+
+
+    cout<<returnString;
+
+
+    return returnString;
+}
+
+
+
 
 #endif
