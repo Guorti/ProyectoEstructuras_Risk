@@ -115,6 +115,18 @@ Risk1.turno(numeroTurno);
             std::cout<<"Comando exitoso!"<<std::endl;
         }else if(consola =="salir"){
            
+        }
+        else if(consola =="inicializar archivo"){
+            if(Risk1.inicio_J == true){
+                std::cout<<"(Juego en curso) El juego ya ha sido inicializado."<<std::endl;
+            }else{
+                std::cout<<"Ingrese el nombre del archivo a cargar."<<std::endl;
+                std::cin>> nombreArchivo;
+                //Risk1.allDataToString();
+                Risk1.inicializarPartida(nombreArchivo);
+                std::cout<<"Comando exitoso!"<<std::endl;
+            }
+
         }else if(consola=="guardar"){
            if(Risk1.inicio_J == false){
                std::cout<<"(Juego no inicializado) Esta partida no ha sido inicializada correctamente."<<std::endl;

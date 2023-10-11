@@ -25,6 +25,7 @@ std::list<Continente> Risk::getContinentesList(){
 
 void Risk::inicializarPartida(string nombreArchivo){
     std::stringstream extensionRecibida;
+    extensionRecibida << nombreArchivo;
     std::string segmento;
     std::vector<std::string> seglist;
 
@@ -36,12 +37,16 @@ void Risk::inicializarPartida(string nombreArchivo){
     Continente continenteInstance;
     Pais paisInstance;
 
+
+    continentes.clear();
+
+
     while(std::getline(extensionRecibida, segmento, '.'))
     {
         seglist.push_back(segmento);
     }
 
-    if(seglist[2]=="txt"){
+    if(seglist[1]=="txt") {
 
         //Cargar desde archivo de texto
         std::ifstream inputFile(nombreArchivo, std::ios::in); // Open the file for reading
@@ -53,9 +58,9 @@ void Risk::inicializarPartida(string nombreArchivo){
             return;
         }
         while (getline(inputFile, linea)) {
-            contador=0;
+            contador = 0;
 
-            if(linea == "TURNOSJUGADORES:"){
+            if (linea == "TURNOSJUGADORES:") {
                 getline(inputFile, linea);
                 istringstream ss(linea);
                 turnosJugadores.clear();
@@ -64,61 +69,61 @@ void Risk::inicializarPartida(string nombreArchivo){
                 }
             }
 
-            if(linea == "ATRIBUTOSJUGADORES:"){
+            if (linea == "ATRIBUTOSJUGADORES:") {
                 jugadores.clear();
                 getline(inputFile, linea);
                 getline(inputFile, linea);
-                while(linea != "#"){
+                while (linea != "#") {
+                    contador = 0;
                     istringstream ss(linea);
                     while (getline(ss, auxiliar, ';')) {
-                        atributos[contador]=auxiliar;
+                        atributos[contador] = auxiliar;
                         contador++;
                     }
                     jugadorInstance = Jugador(stoi(atributos[0]), atributos[1], stoi(atributos[2]), stoi(atributos[3]));
                     //Leer apartado de cartas
                     getline(inputFile, linea);
                     //Revisa si tiene cartas
-                    if(linea == "CARTAS:"){
+                    if (linea == "CARTAS:") {
                         getline(inputFile, linea);
-                        while(linea != "#"){
+                        while (linea != "#") {
                             istringstream ss(linea);
-                            contador=0;
+                            contador = 0;
                             while (getline(ss, auxiliar, ';')) {
-                                atributos[contador]=auxiliar;
+                                atributos[contador] = auxiliar;
                                 contador++;
                             }
-                            jugadorInstance.getCartasVector().push_back(Carta(atributos[0], stoi(atributos[1]), stoi(atributos[2])));
+                            jugadorInstance.getCartasVector().push_back(
+                                    Carta(atributos[0], stoi(atributos[1]), stoi(atributos[2])));
                             getline(inputFile, linea);
                         }
-                    }else{
+                    } else {
                         getline(inputFile, linea);
                     }
                     jugadores.push_back(jugadorInstance);
                 }
 
-                contador=0;
+                contador = 0;
                 getline(inputFile, linea);
                 istringstream ss(linea);
 
-
-
-                getline(inputFile, linea);
 
             }
 
-            if(linea == "CONTINENTE:"){
+            if (linea == "CONTINENTE:") {
 
-                continentes.clear();
                 getline(inputFile, linea);
                 istringstream ss(linea);
                 while (getline(ss, auxiliar, ';')) {
-                    atributos[contador]=auxiliar;
+                    atributos[contador] = auxiliar;
                     contador++;
                 }
                 continenteInstance = Continente(stoi(atributos[0]), atributos[1]);
                 getline(inputFile, linea);
                 getline(inputFile, linea);
-                while(linea != "#") {
+                getline(inputFile, linea);
+                while (linea != "#") {
+                    contador = 0;
                     istringstream ss(linea);
                     while (getline(ss, auxiliar, ';')) {
                         atributos[contador] = auxiliar;
@@ -134,75 +139,41 @@ void Risk::inicializarPartida(string nombreArchivo){
                     while (getline(sss, auxiliar, ';')) {
                         paisInstance.getPaisesColindantes().push_back(stoi(auxiliar));
                     }
+                    continenteInstance.getPaisesList().push_back(paisInstance);
                     getline(inputFile, linea);
                 }
+                continentes.push_back(continenteInstance);
+                getline(inputFile, linea);
+            }
 
-                if(linea == "CARTASRISK:"){
+                if (linea == "CARTASRISK:") {
                     getline(inputFile, linea);
                     getline(inputFile, linea);
                     //logica cargar cartas
-                }
-
-
-
-                    //Leer apartado de cartas
-                    getline(inputFile, linea);
-                    //Revisa si tiene cartas
-                    if(linea == "CARTAS:"){
-                        getline(inputFile, linea);
-                        while(linea != "#"){
-                            istringstream ss(linea);
-                            contador=0;
-                            while (getline(ss, auxiliar, ';')) {
-                                atributos[contador]=auxiliar;
-                                contador++;
-                            }
-                            jugadorInstance.getCartasVector().push_back(Carta(atributos[0], stoi(atributos[1]), stoi(atributos[2])));
-                            getline(inputFile, linea);
+                    cartas.clear();
+                    while (linea != "#") {
+                        istringstream ss(linea);
+                        contador = 0;
+                        while (getline(ss, auxiliar, ';')) {
+                            atributos[contador] = auxiliar;
+                            contador++;
                         }
-                    }else{
+                        cartas.push_back(Carta(atributos[0], stoi(atributos[1]), stoi(atributos[2])));
                         getline(inputFile, linea);
                     }
-                    jugadores.push_back(jugadorInstance);
                 }
 
-                contador=0;
-                getline(inputFile, linea);
-                //istringstream ss(linea);
-
-
-
-                getline(inputFile, linea);
-
-
-
-            /*
-            while (getline(ss, auxiliar, ';')) {
-                atributos[contador]=auxiliar;
-                contador++;
-            }
-
-            recetaInstance = Receta (atributos[0]);
-            ingredienteInstance = Ingrediente(Ingrediente (atributos[1], stoi(atributos[2]), (atributos[3])));
-
-            recetaInstance.getIngredientesList().push_back(ingredienteInstance);
-
-            ingredienteInstance = Ingrediente (Ingrediente (atributos[4], stoi(atributos[5]), (atributos[6])));
-
-            recetaInstance.getIngredientesList().push_front(ingredienteInstance);
-
-            recetaInstance.getInstrucciones().insert(pair<int, string>(stoi(atributos[7]), atributos[8]));
-
-
-            recetasTree.addNode(recetaInstance);
-
-            */
+                if (linea == "TURNOPARTIDA:") {
+                    getline(inputFile, linea);
+                    turnoPartida = stoi(linea);
+                }
+                if (linea == "RECLAMOCARTAS:") {
+                    getline(inputFile, linea);
+                    reclamoCartas = stoi(linea);
+                }
 
         }
-
-
     }
-
 
 }
 
@@ -213,7 +184,6 @@ void Risk::guardarPartida(string nombreArchivo){
     std::ostringstream ss;
 
     allDataToString(ss);
-    cout<<"HOLA2";
 
     cout << ss.str();
 
@@ -229,9 +199,9 @@ void Risk::guardarPartida(string nombreArchivo){
           // Close the file
           outputFile.close();
 
-          std::cout << "Data has been written to the file." << std::endl;
+          std::cout << "Los datos se han escrito en el archivo." << std::endl;
       }else {
-          std::cout << "Failed to open the file." << std::endl;
+          std::cout << "Fallo al abrir el archivo." << std::endl;
       }
 }
 
@@ -1356,8 +1326,7 @@ void Risk::allDataToString(std::ostringstream &ss){
             ss << "SINCARTAS:\n";
         }
     }
-
-
+    ss << "#\n";
     for (std::list<Continente>::iterator itdorCont = continentes.begin(); itdorCont != continentes.end();++itdorCont) {
         ss << "CONTINENTE:\n";
         ss << itdorCont->getIdContinente() << ";";
