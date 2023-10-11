@@ -11,6 +11,8 @@ private:
 public:
     Continente(int idCont, const std::string& nombre, const std::list<Pais>& listaPaises) : idContinente(idCont), nombreContinente(nombre), paises(listaPaises) {}
     Continente() : nombreContinente(""), idContinente(-1) {}
+
+    Continente(int idCont, const std::string& nombre): idContinente(idCont), nombreContinente(nombre) {}
     
     std::string getNombreContinente() {
         return nombreContinente;

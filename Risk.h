@@ -46,6 +46,8 @@ public:
 
     std::list<Continente> getContinentesList();
 
+    void inicializarPartida(std::string nombreArchivo);
+
 
 
 };

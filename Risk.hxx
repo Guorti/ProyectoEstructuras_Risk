@@ -23,7 +23,188 @@ std::list<Continente> Risk::getContinentesList(){
 }
 
 
+void Risk::inicializarPartida(string nombreArchivo){
+    std::stringstream extensionRecibida;
+    std::string segmento;
+    std::vector<std::string> seglist;
 
+    string linea;
+    string auxiliar;
+    int contador;
+
+    Jugador jugadorInstance;
+    Continente continenteInstance;
+    Pais paisInstance;
+
+    while(std::getline(extensionRecibida, segmento, '.'))
+    {
+        seglist.push_back(segmento);
+    }
+
+    if(seglist[2]=="txt"){
+
+        //Cargar desde archivo de texto
+        std::ifstream inputFile(nombreArchivo, std::ios::in); // Open the file for reading
+        std::string atributos[9];
+
+
+        if (!inputFile.is_open()) {
+            std::cout << "Error abriendo el archivo" << std::endl;
+            return;
+        }
+        while (getline(inputFile, linea)) {
+            contador=0;
+
+            if(linea == "TURNOSJUGADORES:"){
+                getline(inputFile, linea);
+                istringstream ss(linea);
+                turnosJugadores.clear();
+                while (getline(ss, auxiliar, ';')) {
+                    turnosJugadores.push_back(stoi(auxiliar));
+                }
+            }
+
+            if(linea == "ATRIBUTOSJUGADORES:"){
+                jugadores.clear();
+                getline(inputFile, linea);
+                getline(inputFile, linea);
+                while(linea != "#"){
+                    istringstream ss(linea);
+                    while (getline(ss, auxiliar, ';')) {
+                        atributos[contador]=auxiliar;
+                        contador++;
+                    }
+                    jugadorInstance = Jugador(stoi(atributos[0]), atributos[1], stoi(atributos[2]), stoi(atributos[3]));
+                    //Leer apartado de cartas
+                    getline(inputFile, linea);
+                    //Revisa si tiene cartas
+                    if(linea == "CARTAS:"){
+                        getline(inputFile, linea);
+                        while(linea != "#"){
+                            istringstream ss(linea);
+                            contador=0;
+                            while (getline(ss, auxiliar, ';')) {
+                                atributos[contador]=auxiliar;
+                                contador++;
+                            }
+                            jugadorInstance.getCartasVector().push_back(Carta(atributos[0], stoi(atributos[1]), stoi(atributos[2])));
+                            getline(inputFile, linea);
+                        }
+                    }else{
+                        getline(inputFile, linea);
+                    }
+                    jugadores.push_back(jugadorInstance);
+                }
+
+                contador=0;
+                getline(inputFile, linea);
+                istringstream ss(linea);
+
+
+
+                getline(inputFile, linea);
+
+            }
+
+            if(linea == "CONTINENTE:"){
+
+                continentes.clear();
+                getline(inputFile, linea);
+                istringstream ss(linea);
+                while (getline(ss, auxiliar, ';')) {
+                    atributos[contador]=auxiliar;
+                    contador++;
+                }
+                continenteInstance = Continente(stoi(atributos[0]), atributos[1]);
+                getline(inputFile, linea);
+                getline(inputFile, linea);
+                while(linea != "#") {
+                    istringstream ss(linea);
+                    while (getline(ss, auxiliar, ';')) {
+                        atributos[contador] = auxiliar;
+                        contador++;
+                    }
+                    paisInstance = Pais(stoi(atributos[0]), atributos[1], stoi(atributos[2]), stoi(atributos[3]), {});
+                    //continenteInstance.getPaisesList().push_back(Pais(stoi(atributos[0]), atributos[1], stoi(atributos[2]),
+                    //stoi(atributos[3]), {}));
+                    //Leer apartado colindantes
+                    getline(inputFile, linea);
+                    getline(inputFile, linea);
+                    istringstream sss(linea);
+                    while (getline(sss, auxiliar, ';')) {
+                        paisInstance.getPaisesColindantes().push_back(stoi(auxiliar));
+                    }
+                    getline(inputFile, linea);
+                }
+
+                if(linea == "CARTASRISK:"){
+                    getline(inputFile, linea);
+                    getline(inputFile, linea);
+                    //logica cargar cartas
+                }
+
+
+
+                    //Leer apartado de cartas
+                    getline(inputFile, linea);
+                    //Revisa si tiene cartas
+                    if(linea == "CARTAS:"){
+                        getline(inputFile, linea);
+                        while(linea != "#"){
+                            istringstream ss(linea);
+                            contador=0;
+                            while (getline(ss, auxiliar, ';')) {
+                                atributos[contador]=auxiliar;
+                                contador++;
+                            }
+                            jugadorInstance.getCartasVector().push_back(Carta(atributos[0], stoi(atributos[1]), stoi(atributos[2])));
+                            getline(inputFile, linea);
+                        }
+                    }else{
+                        getline(inputFile, linea);
+                    }
+                    jugadores.push_back(jugadorInstance);
+                }
+
+                contador=0;
+                getline(inputFile, linea);
+                //istringstream ss(linea);
+
+
+
+                getline(inputFile, linea);
+
+
+
+            /*
+            while (getline(ss, auxiliar, ';')) {
+                atributos[contador]=auxiliar;
+                contador++;
+            }
+
+            recetaInstance = Receta (atributos[0]);
+            ingredienteInstance = Ingrediente(Ingrediente (atributos[1], stoi(atributos[2]), (atributos[3])));
+
+            recetaInstance.getIngredientesList().push_back(ingredienteInstance);
+
+            ingredienteInstance = Ingrediente (Ingrediente (atributos[4], stoi(atributos[5]), (atributos[6])));
+
+            recetaInstance.getIngredientesList().push_front(ingredienteInstance);
+
+            recetaInstance.getInstrucciones().insert(pair<int, string>(stoi(atributos[7]), atributos[8]));
+
+
+            recetasTree.addNode(recetaInstance);
+
+            */
+
+        }
+
+
+    }
+
+
+}
 
 void Risk::guardarPartida(string nombreArchivo){
 
@@ -1136,6 +1317,7 @@ void Risk::allDataToString(std::ostringstream &ss){
     //std::ostringstream ss;
 
     ss << "TURNOSJUGADORES:\n";
+
     for (std::list<int>::iterator itdor = turnosJugadores.begin(); itdor != turnosJugadores.end();++itdor) {
 
         ss << *itdor;
@@ -1146,6 +1328,7 @@ void Risk::allDataToString(std::ostringstream &ss){
 
     ss << "\n";
     ss << "ATRIBUTOSJUGADORES:\n";
+    ss << "#\n";
 
     for (std::list<Jugador>::iterator itdor = jugadores.begin(); itdor != jugadores.end();++itdor) {
         //Id jugador
@@ -1161,12 +1344,14 @@ void Risk::allDataToString(std::ostringstream &ss){
         ss << itdor->getArmadas() << "\n";
 
         if(itdor->getCartasVector().size() > 0){
+            ss << "CARTAS:\n";
+            ss << "#\n";
             for (std::vector<Carta>::iterator itdorCartas = itdor->getCartasVector().begin(); itdorCartas != itdor->getCartasVector().end(); ++itdorCartas) {
-                ss << "CARTAS:\n";
                 ss << itdorCartas->getTipoUnidad() << ";";
                 ss << itdorCartas->getCodigoPais() << ";";
                 ss << itdorCartas->isComodin() << "\n";
             }
+            ss << "#\n";
         }else{
             ss << "SINCARTAS:\n";
         }
@@ -1178,21 +1363,33 @@ void Risk::allDataToString(std::ostringstream &ss){
         ss << itdorCont->getIdContinente() << ";";
         ss << itdorCont->getNombreContinente() << "\n";
         ss << "PAISES:\n";
+        ss << "#\n";
 
         for (std::list<Pais>::iterator itdorPais = itdorCont->getPaisesList().begin(); itdorPais != itdorCont->getPaisesList().end();++itdorPais) {
             ss << itdorPais->getIDPais() << ";";
             ss << itdorPais->getNombrePais() << ";";
             ss << itdorPais->getCantidadArmadas() << ";";
             ss << itdorPais->getColorOcupacion() << "\n";
+            ss << "COLINDANTES:" << "\n";
+            for(std::list<int>::iterator itdorColind = itdorPais->getPaisesColindantes().begin(); itdorColind != itdorPais->getPaisesColindantes().end();++itdorColind){
+                ss << *itdorColind;
+                if(next(itdorColind) != itdorPais->getPaisesColindantes().end()){
+                    ss << ";";
+                }
+            }
+            ss << "\n";
         }
+        ss << "#\n";
     }
 
     ss << "CARTASRISK:\n";
+    ss << "#\n";
     for(std::vector<Carta>::iterator itdorCartasR = cartas.begin(); itdorCartasR != cartas.end(); ++itdorCartasR){
         ss << itdorCartasR->getTipoUnidad() << ";";
         ss << itdorCartasR->getCodigoPais() << ";";
         ss << itdorCartasR->isComodin() << "\n";
     }
+    ss << "#\n";
     ss << "TURNOPARTIDA:\n";
     ss << turnoPartida << "\n";
     ss << "RECLAMOCARTAS:\n";
