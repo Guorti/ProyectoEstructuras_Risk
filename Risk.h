@@ -38,9 +38,12 @@ public:
     void guardarPartida(std::string nombreArchivo);
 
     std::list<int> getTurnosJugadores();
+
     std::list<Jugador> getJugadoresList();
 
-    std::string allDataToString();
+    std::list<std::string> allDataToString();
+
+    std::list<Continente> getContinentesList();
 
 
 

@@ -23,6 +23,7 @@ public:
         return paises;
       }
 
+
       void getPaises() {
         for (std::list<Pais>::iterator itdor = paises.begin(); itdor != paises.end();++itdor) {
           itdor->getInfoPais();

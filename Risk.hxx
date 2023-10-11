@@ -2,7 +2,10 @@
 #define RISK_HXX
 
 #include "Risk.h"
+#include <cstring>
 #include <fstream>
+#include <sstream>
+
 using namespace std;
 
 
@@ -14,6 +17,11 @@ std::list<int> Risk::getTurnosJugadores(){
 std::list<Jugador> Risk::getJugadoresList(){
     return jugadores;
 }
+
+std::list<Continente> Risk::getContinentesList(){
+    return continentes;
+}
+
 
 
 
@@ -149,11 +157,12 @@ void Risk::guardarPartida(string nombreArchivo){
     std::cout<<"(Inicializacion satisfactoria) El juego se ha inicializado correctamente!"<<std::endl<<std::endl;
     std::cout<<"Ingrese la cantidad de jugadores: ";
     std::cin>>cantidadJugadores;
-    if(cantidadJugadores==2||cantidadJugadores>6){
+    if(cantidadJugadores <=2||cantidadJugadores>6){
       std::cout<<"No cumple la cantidad de jugadores necesarios"<<std::endl<<std::endl;
       inicio_J=false;
       return;
     }
+
 
     //Se revuelven la cartas (Funcion dada por gpt)
     std::random_device rd;
@@ -1115,36 +1124,49 @@ void Risk::ingresarTropas(std::list<Jugador>::iterator itdorJugador) {
     return aux;
   }
 
-string Risk::allDataToString(){
+std::list<string> Risk::allDataToString(){
 
-    string returnString;
+    std::list<string> hola;
+    std::ostringstream ss;
 
-    returnString.append("turnosJugadores:\n");
-    for (std::list<int>::iterator itdor = getTurnosJugadores().begin(); itdor != getTurnosJugadores().end();++itdor) {
-        returnString.append(to_string(*itdor));
-        if(itdor != getTurnosJugadores().end()){
-            returnString.append(";");
-        }
-    }
-    returnString.append("\n");
+    ss << "TURNOSJUGADORES:\n";
+    for (std::list<int>::iterator itdor = turnosJugadores.begin(); itdor != turnosJugadores.end();++itdor) {
 
-    returnString.append("atributosJugadores:\n");
-    for (std::list<Jugador>::iterator itdor = getJugadoresList().begin(); itdor != getJugadoresList().end();++itdor) {
-        returnString.append(to_string(itdor->getIdJugador()) + ";");
-        returnString.append(itdor->getNombre() + ";");
-        returnString.append(to_string(itdor->getColor()) + ";");
-        returnString.append(to_string(itdor->getArmadas()));
-        if(itdor != getJugadoresList().end()){
-            returnString.append("\n");
+        ss << *itdor;
+        if(next(itdor) != turnosJugadores.end()){
+            ss << ";";
         }
     }
 
+    ss << "\n";
+    ss << "ATRIBUTOSJUGADORES:\n";
+
+    for (std::list<Jugador>::iterator itdor = jugadores.begin(); itdor != jugadores.end();++itdor) {
+        //Id jugador
+        ss << itdor->getIdJugador() << ";";
+
+        //Nombre Jugador
+        ss << itdor->getNombre() << ";";
+
+        //Color Jugador
+        ss << itdor->getColor() << ";";
+
+        //Armadas Jugador
+        ss << itdor->getArmadas() << "\n";
+    }
+
+    ss << "CONTINENTES:";
+    for (std::list<Continente>::iterator itdorCont = continentes.begin(); itdorCont != continentes.end();++itdorCont) {
 
 
-    cout<<returnString;
+        for (std::list<Pais>::iterator itdorPais = itdorCont->getPaisesList().begin(); itdorPais != itdorCont->getPaisesList().end();++itdorPais) {
 
+        }
 
-    return returnString;
+    }
+    cout << ss.str();
+
+    return hola;
 }
 
 
