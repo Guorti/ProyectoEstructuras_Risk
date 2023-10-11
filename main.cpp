@@ -25,6 +25,7 @@ int main() {
     srand(time(NULL));
 
   Risk Risk1;
+  string nombreArchivo;
 
     std::cout << " .----------------.  .----------------.  .----------------.  .----------------. \n";
     std::cout << "| .--------------. || .--------------. || .--------------. || .--------------. |\n";
@@ -115,8 +116,17 @@ Risk1.turno(numeroTurno);
         }else if(consola =="salir"){
            
         }else if(consola=="guardar"){
-           Risk1.allDataToString();
-            std::cout<<"Comando exitoso!"<<std::endl;
+           if(Risk1.inicio_J == false){
+               std::cout<<"(Juego no inicializado) Esta partida no ha sido inicializada correctamente."<<std::endl;
+           }else{
+               std::cout<<"Ingrese el nombre del nuevo archivo."<<std::endl;
+               std::cin>> nombreArchivo;
+               //Risk1.allDataToString();
+               Risk1.guardarPartida(nombreArchivo);
+               std::cout<<"Comando exitoso!"<<std::endl;
+           }
+
+
         }else if(consola =="inicializar"){
             if(Risk1.inicio_J == false){
                 Risk1.inicio_J = true;

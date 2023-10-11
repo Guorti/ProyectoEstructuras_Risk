@@ -27,16 +27,23 @@ std::list<Continente> Risk::getContinentesList(){
 
 void Risk::guardarPartida(string nombreArchivo){
 
+    cout<<"HOLA";
+
+    std::ostringstream ss;
+
+    allDataToString(ss);
+    cout<<"HOLA2";
+
+    cout << ss.str();
+
       // Open a file named "output.txt" for writing
       std::ofstream outputFile(nombreArchivo + ".txt");
 
       // Check if the file is successfully opened
       if (outputFile.is_open()) {
-          // Declare a variable
-          int number = 42;
 
           // Write the variable to the file
-          outputFile << "The value of the variable is: " << number;
+          outputFile << ss.str();
 
           // Close the file
           outputFile.close();
@@ -1124,10 +1131,9 @@ void Risk::ingresarTropas(std::list<Jugador>::iterator itdorJugador) {
     return aux;
   }
 
-std::list<string> Risk::allDataToString(){
+void Risk::allDataToString(std::ostringstream &ss){
 
-    std::list<string> hola;
-    std::ostringstream ss;
+    //std::ostringstream ss;
 
     ss << "TURNOSJUGADORES:\n";
     for (std::list<int>::iterator itdor = turnosJugadores.begin(); itdor != turnosJugadores.end();++itdor) {
@@ -1153,20 +1159,48 @@ std::list<string> Risk::allDataToString(){
 
         //Armadas Jugador
         ss << itdor->getArmadas() << "\n";
+
+        if(itdor->getCartasVector().size() > 0){
+            for (std::vector<Carta>::iterator itdorCartas = itdor->getCartasVector().begin(); itdorCartas != itdor->getCartasVector().end(); ++itdorCartas) {
+                ss << "CARTAS:\n";
+                ss << itdorCartas->getTipoUnidad() << ";";
+                ss << itdorCartas->getCodigoPais() << ";";
+                ss << itdorCartas->isComodin() << "\n";
+            }
+        }else{
+            ss << "SINCARTAS:\n";
+        }
     }
 
-    ss << "CONTINENTES:";
-    for (std::list<Continente>::iterator itdorCont = continentes.begin(); itdorCont != continentes.end();++itdorCont) {
 
+    for (std::list<Continente>::iterator itdorCont = continentes.begin(); itdorCont != continentes.end();++itdorCont) {
+        ss << "CONTINENTE:\n";
+        ss << itdorCont->getIdContinente() << ";";
+        ss << itdorCont->getNombreContinente() << "\n";
+        ss << "PAISES:\n";
 
         for (std::list<Pais>::iterator itdorPais = itdorCont->getPaisesList().begin(); itdorPais != itdorCont->getPaisesList().end();++itdorPais) {
-
+            ss << itdorPais->getIDPais() << ";";
+            ss << itdorPais->getNombrePais() << ";";
+            ss << itdorPais->getCantidadArmadas() << ";";
+            ss << itdorPais->getColorOcupacion() << "\n";
         }
-
     }
-    cout << ss.str();
 
-    return hola;
+    ss << "CARTASRISK:\n";
+    for(std::vector<Carta>::iterator itdorCartasR = cartas.begin(); itdorCartasR != cartas.end(); ++itdorCartasR){
+        ss << itdorCartasR->getTipoUnidad() << ";";
+        ss << itdorCartasR->getCodigoPais() << ";";
+        ss << itdorCartasR->isComodin() << "\n";
+    }
+    ss << "TURNOPARTIDA:\n";
+    ss << turnoPartida << "\n";
+    ss << "RECLAMOCARTAS:\n";
+    ss << reclamoCartas << "\n";
+    ss << "#FIN#\n";
+
+    //cout << ss.str();
+
 }
 
 

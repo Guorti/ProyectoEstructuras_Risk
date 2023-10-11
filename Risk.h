@@ -35,13 +35,14 @@ public:
     int contadorTerritorios(std::list<Jugador>::iterator itdorJugador);
     void sacarCarta(std::list<Jugador>::iterator itdorJugador);
     void ingresarTropas(std::list<Jugador>::iterator itdorJugador);
+
     void guardarPartida(std::string nombreArchivo);
 
     std::list<int> getTurnosJugadores();
 
     std::list<Jugador> getJugadoresList();
 
-    std::list<std::string> allDataToString();
+    void allDataToString(std::ostringstream &ss);
 
     std::list<Continente> getContinentesList();
 
