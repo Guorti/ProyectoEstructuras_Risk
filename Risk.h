@@ -4,6 +4,8 @@
 
 //No se halló razon del porque se tuvo que utilizar in include con la clase Carta, sin ello falla
 #include "Carta.h"
+#include "binary_tree/BinaryTree.h"
+#include "huffman_data/HuffmanData.h"
 #include <string>
 
 class Risk {
@@ -18,6 +20,9 @@ private:
     std::vector<Carta> cartas;
     int turnoPartida=-1;
     int reclamoCartas=2;
+
+    BinaryTree<HuffmanData> huffmanTree;
+    unordered_map<char, string> Mappeo;
 
 public:
     bool inicio_J = false;
@@ -36,19 +41,15 @@ public:
     void sacarCarta(std::list<Jugador>::iterator itdorJugador);
     void ingresarTropas(std::list<Jugador>::iterator itdorJugador);
 
-    void guardarPartida(std::string nombreArchivo);
+    void guardarPartidaText(std::string nombreArchivo);
 
-    std::list<int> getTurnosJugadores();
-
-    std::list<Jugador> getJugadoresList();
+    void guardarPartidaBin(std::string nombreArchivo);
 
     void allDataToString(std::ostringstream &ss);
 
-    std::list<Continente> getContinentesList();
-
     void inicializarPartida(std::string nombreArchivo);
 
-
+    void huffmanToString(std::ostringstream &ss);
 
 };
 

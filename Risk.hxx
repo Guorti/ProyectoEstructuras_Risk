@@ -2,25 +2,119 @@
 #define RISK_HXX
 
 #include "Risk.h"
+#include "binary_tree/BinaryTree.h"
+#include "huffman_data/HuffmanData.h"
 #include <cstring>
 #include <fstream>
 #include <sstream>
+#include <queue>
 
 using namespace std;
 
+//GUARDADO HUFFMAN
 
-//Getters
-std::list<int> Risk::getTurnosJugadores(){
-    return turnosJugadores;
-}
 
-std::list<Jugador> Risk::getJugadoresList(){
-    return jugadores;
-}
+void Risk::guardarPartidaBin(string nombreArchivo){
+    std::ostringstream ss;
 
-std::list<Continente> Risk::getContinentesList(){
-    return continentes;
+    allDataToString(ss);
+
+    //HUFFMAN
+
+    std::ostringstream ssBin;
+    cout<<"\n\nPrueba Huffman\n";
+    cout<<"Frecuencia de caracteres: \n";
+
+    //Iterar sobre la cadena de caracteres, si el caractér no habia aparecido, contar su frecuencia.
+    unordered_map<char, int> charCount;
+
+    for (int i=0;i<ss.str().size();i++) {
+        // Si el caracter no está en el map, inicializar su cuenta en 1, si ya esta incrementar.
+        if (charCount.find(ss.str()[i]) == charCount.end()) {
+            charCount[ss.str()[i]] = 1;
+        } else {
+            charCount[ss.str()[i]]++;
+        }
+    }
+
+    for (unordered_map<char, int>::iterator it = charCount.begin(); it != charCount.end(); ++it) {
+        std::cout << "'" << it->first << "': " << it->second << std::endl;
+    }
+
+    //Creamos una cola de prioridad de nodos para llevar a cabo huffman
+
+    priority_queue<BinaryNode<HuffmanData>*, vector<BinaryNode<HuffmanData>*>, BinaryNode<HuffmanData>::BinaryNodeComparator> colaFrecuencias;
+    //Llenamos la cola con la estructura que creamos
+    for (unordered_map<char, int>::iterator it = charCount.begin(); it != charCount.end(); ++it) {
+        colaFrecuencias.push(new BinaryNode<HuffmanData>(HuffmanData(it->first, it->second)));
+    }
+
+    //Se realiza el algoritmo huffman utilizando la cola de prioridad
+    int sumaFrecuencia;
+    while(colaFrecuencias.size()>1){
+        BinaryNode<HuffmanData>* pNodeAux = colaFrecuencias.top();
+        colaFrecuencias.pop();
+        BinaryNode<HuffmanData>* pNodeAux2 = colaFrecuencias.top();
+        colaFrecuencias.pop();
+
+        sumaFrecuencia=pNodeAux->getData().getFrecuencia()+pNodeAux2->getData().getFrecuencia();
+
+        BinaryNode<HuffmanData>* tempNode = new BinaryNode<HuffmanData>(HuffmanData(sumaFrecuencia));
+        tempNode->setLeft(pNodeAux);
+        tempNode->setRight(pNodeAux2);
+
+        colaFrecuencias.push(tempNode);
+
+
+    }
+
+    //Creamos el arbol con el nodo final
+    BinaryNode<HuffmanData>* nodeAux = new BinaryNode<HuffmanData>(*colaFrecuencias.top());
+    huffmanTree = BinaryTree<HuffmanData>(nodeAux);
+
+
+    huffmanTree.mapHuffman(Mappeo);
+
+    cout<<"\n\nMappeo Huffman"<<endl;
+    for (unordered_map<char, string>::iterator it = Mappeo.begin(); it != Mappeo.end(); ++it) {
+        std::cout << "'" << it->first << "': " << it->second << std::endl;
+        ss << it->first << ";" << it->second << std::endl;
+    }
+
+
+    //CONVERSION STRING BINARIO
+    for (int i=0;i<ss.str().size();i++) {
+        unordered_map<char, string>::iterator it = Mappeo.find(ss.str()[i]);
+        if (it != Mappeo.end()) {
+            ssBin << it->second;
+        }
+    }
+
+    std::cout << ssBin.str();
+
+    std::cout<<endl;
+
+    //FIN HUFFMAN
+    // Open a file named "output.txt" for writing
+    std::ofstream outputFile(nombreArchivo, std::ios::out | std::ios::binary);
+
+    // Check if the file is successfully opened
+    if (outputFile.is_open()) {
+
+        // Write the variable to the file
+        outputFile << ssBin.str();
+
+        // Close the file
+        outputFile.close();
+
+        std::cout << "Los datos se han escrito en el archivo binario." << std::endl;
+    }else {
+        std::cout << "Fallo al abrir el archivo." << std::endl;
+    }
+
 }
+//FIN GUARDADO HUFFMAN
+
 
 
 void Risk::inicializarPartida(string nombreArchivo){
@@ -171,38 +265,35 @@ void Risk::inicializarPartida(string nombreArchivo){
                     getline(inputFile, linea);
                     reclamoCartas = stoi(linea);
                 }
-
         }
     }
 
+
 }
 
-void Risk::guardarPartida(string nombreArchivo){
 
-    cout<<"HOLA";
-
+void Risk::guardarPartidaText(string nombreArchivo){
     std::ostringstream ss;
 
-    allDataToString(ss);
+        allDataToString(ss);
+        cout << ss.str();
 
-    cout << ss.str();
+        // Open a file named "output.txt" for writing
+        std::ofstream outputFile(nombreArchivo);
 
-      // Open a file named "output.txt" for writing
-      std::ofstream outputFile(nombreArchivo + ".txt");
+        // Check if the file is successfully opened
+        if (outputFile.is_open()) {
 
-      // Check if the file is successfully opened
-      if (outputFile.is_open()) {
+            // Write the variable to the file
+            outputFile << ss.str();
 
-          // Write the variable to the file
-          outputFile << ss.str();
+            // Close the file
+            outputFile.close();
 
-          // Close the file
-          outputFile.close();
-
-          std::cout << "Los datos se han escrito en el archivo." << std::endl;
-      }else {
-          std::cout << "Fallo al abrir el archivo." << std::endl;
-      }
+            std::cout << "Los datos se han escrito en el archivo." << std::endl;
+        }else {
+            std::cout << "Fallo al abrir el archivo." << std::endl;
+        }
 }
 
 
@@ -1282,6 +1373,15 @@ void Risk::ingresarTropas(std::list<Jugador>::iterator itdorJugador) {
     return aux;
   }
 
+
+void Risk::huffmanToString(std::ostringstream &ss){
+
+
+
+}
+
+
+
 void Risk::allDataToString(std::ostringstream &ss){
 
     //std::ostringstream ss;
@@ -1365,7 +1465,6 @@ void Risk::allDataToString(std::ostringstream &ss){
     ss << reclamoCartas << "\n";
     ss << "#FIN#\n";
 
-    //cout << ss.str();
 
 }
 

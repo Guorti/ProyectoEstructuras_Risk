@@ -2,7 +2,6 @@
 #include <list>
 #include <random>
 #include <string>
-#include <vector>
 #include <ctime>
 #include <cstdlib>
 #include <algorithm>
@@ -10,14 +9,13 @@
 #include "Pais.h"
 #include "Continente.h"
 #include "Risk.h"
-#include "Carta.h"
+#include "binary_tree/BinaryTree.h"
+#include "huffman_data/HuffmanData.h"
 
 
 std::string consola;
 
 //INTERFAZ
-
-
 
 int main() {
 
@@ -134,7 +132,7 @@ Risk1.turno(numeroTurno);
                std::cout<<"Ingrese el nombre del nuevo archivo."<<std::endl;
                std::cin>> nombreArchivo;
                //Risk1.allDataToString();
-               Risk1.guardarPartida(nombreArchivo);
+               Risk1.guardarPartidaText(nombreArchivo);
                std::cout<<"Comando exitoso!"<<std::endl;
            }
 
@@ -147,6 +145,14 @@ Risk1.turno(numeroTurno);
                 std::cout<<"(Juego en curso) El juego ya ha sido inicializado"<<std::endl;
             }
         }else if(consola =="guardar_comprimido"){
+            if(Risk1.inicio_J == false){
+                std::cout<<"(Juego no inicializado) Esta partida no ha sido inicializada correctamente."<<std::endl;
+            }else{
+                std::cout<<"Ingrese el nombre del nuevo archivo."<<std::endl;
+                std::cin>> nombreArchivo;
+                Risk1.guardarPartidaBin(nombreArchivo);
+                std::cout<<"Comando exitoso!"<<std::endl;
+            }
             std::cout<<"Comando exitoso!"<<std::endl;
         }else if(consola =="costo_conquista"){
             std::cout<<"Comando exitoso!"<<std::endl;
