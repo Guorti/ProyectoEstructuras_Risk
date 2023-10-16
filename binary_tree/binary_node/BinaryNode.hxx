@@ -12,6 +12,8 @@ BinaryNode<T>::BinaryNode(T data){
 }
 
 
+
+
 template <typename T>
 BinaryNode<T>::BinaryNode(T data, BinaryNode<T> *left, BinaryNode<T> *right)
 {
@@ -44,6 +46,8 @@ bool operator<(const BinaryNode<T>& lhs, const BinaryNode<T>& rhs) {
     return lhs.data > rhs.data;
 }
 */
+
+
 template <typename T>
 T BinaryNode<T>::getData() const
 {
@@ -138,13 +142,13 @@ bool BinaryNode<T>::operator>(const BinaryNode &otherBinaryNode) const
 template <typename T>
 bool BinaryNode<T>::operator<(const BinaryNode<T>* otherBinaryNode) const
 {
-    return data < otherBinaryNode->data;
+    return *data < otherBinaryNode->data;
 }
 
 template <typename T>
 bool BinaryNode<T>::operator>(const BinaryNode<T>* otherBinaryNode) const
 {
-    return data > otherBinaryNode->data;
+    return *data > otherBinaryNode->data;
 }
 
 

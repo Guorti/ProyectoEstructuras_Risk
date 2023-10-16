@@ -115,15 +115,15 @@ Risk1.turno(numeroTurno);
            
         }
         else if(consola =="inicializar archivo"){
-            if(Risk1.inicio_J == true){
-                std::cout<<"(Juego en curso) El juego ya ha sido inicializado."<<std::endl;
-            }else{
+            //if(Risk1.inicio_J == true){
+            //    std::cout<<"(Juego en curso) El juego ya ha sido inicializado."<<std::endl;
+            //}else{
                 std::cout<<"Ingrese el nombre del archivo a cargar."<<std::endl;
                 std::cin>> nombreArchivo;
                 //Risk1.allDataToString();
                 Risk1.inicializarPartida(nombreArchivo);
                 std::cout<<"Comando exitoso!"<<std::endl;
-            }
+            //}
 
         }else if(consola=="guardar"){
            if(Risk1.inicio_J == false){

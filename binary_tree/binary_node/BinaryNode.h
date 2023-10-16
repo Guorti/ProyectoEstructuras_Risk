@@ -3,6 +3,7 @@
 
 #include <ostream>
 #include <memory>
+#include "../../huffman_data/HuffmanData.h"
 
 using namespace std;
 
@@ -16,14 +17,19 @@ protected:
 
 public:
 
+    int getFrecuencia() const;
+    void setFrecuencia(int frecuencia);
+
+
     struct BinaryNodeComparator {
-        bool operator()(const BinaryNode<T>* lhs, const BinaryNode<T>* rhs) const {
-            return *lhs > *rhs; // Use the > operator you've defined for BinaryNode.
+        bool operator()( BinaryNode<T>* lhs,  BinaryNode<T>* rhs) const {
+            return lhs->data > rhs->data;
         }
     };
 
     /* Constructor and Destructor */
     explicit BinaryNode(T data);
+    explicit BinaryNode(T data, int frecuencia);
     BinaryNode(T data, BinaryNode<T> *left, BinaryNode<T> *right);
     BinaryNode(T data, BinaryNode<T> left, BinaryNode<T> right);
     //~BinaryNode();
@@ -52,6 +58,7 @@ public:
     bool operator<(const BinaryNode<T>* otherBinaryNode) const;
 
     bool operator>(const BinaryNode<T>* otherBinaryNode) const;
+
 
 
     template <typename U>

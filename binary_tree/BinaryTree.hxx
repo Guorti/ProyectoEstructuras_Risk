@@ -2,8 +2,49 @@
 #define BINARY_TREE_HXX
 
 #include <deque>
+#include <queue>
+#include <sstream>
 #include "BinaryTree.h"
 #include "binary_node/BinaryNode.h"
+#include "../huffman_data/HuffmanData.h"
+
+
+template <typename T>
+std::ostringstream BinaryTree<T>::binaryToChar(std::queue<char> &ordenBinarios){
+    std::ostringstream returnString;
+
+    while(!ordenBinarios.empty()){
+        returnString << binaryToCharAux(ordenBinarios, root);
+    }
+    return returnString;
+}
+template <typename T>
+string BinaryTree<T>::binaryToCharAux(std::queue<char> &ordenBinarios, BinaryNode<T> *&node){
+    std::stringstream stringAux;
+
+    if(node == nullptr){
+        return "";
+    }
+
+    if(node->isLeaf()){
+        stringAux << HuffmanData(node->data).getSymbol();
+        //ss << stringAux.str();
+        //ss << stringAux.str();
+        std::cout << stringAux.str();
+        return stringAux.str();
+    }
+
+    if(ordenBinarios.front()== '1'){
+        ordenBinarios.pop();
+        return binaryToCharAux(ordenBinarios, node->rightChild);
+    }
+
+    if(ordenBinarios.front()== '0'){
+        ordenBinarios.pop();
+        return binaryToCharAux(ordenBinarios, node->leftChild);
+    }
+
+}
 
 template <typename T>
 bool BinaryTree<T>::addNodeAux(T const &data, BinaryNode<T> *&node)
@@ -113,6 +154,12 @@ bool BinaryTree<T>::isEmpty() const
 }
 
 template <typename T>
+void BinaryTree<T>::setRoot(BinaryNode<T> *node){
+    root = node;
+}
+
+
+template <typename T>
 bool BinaryTree<T>::addNode(T const &data)
 {
     if (isEmpty())
@@ -147,13 +194,16 @@ void BinaryTree<T>::mapHuffman(unordered_map<char, string> &mapHuff)
     deque<char> dequeLeaf;
 
     mapHuffmanAux(root, mapHuff, dequeLeaf);
-
+    std::cout<<"hola RISK"<<std::endl;
     return;
 }
 
 template <typename T>
 void BinaryTree<T>::mapHuffmanAux(BinaryNode<T> *node, unordered_map<char, string> &mapHuff, deque<char> &dequeLeaf)
 {
+    if(node == nullptr){
+        return;
+    }
     if (node->isLeaf())
     {
         //MODIFICAR EL VALOR DE LA LLAVE X EL RECORRIDO ACTUAL Y REMOVER ULTIMO DIGITO O EL TOP DEL DEQUE

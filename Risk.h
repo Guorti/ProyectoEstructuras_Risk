@@ -22,9 +22,11 @@ private:
     int reclamoCartas=2;
 
     BinaryTree<HuffmanData> huffmanTree;
-    unordered_map<char, string> Mappeo;
+
 
 public:
+    unordered_map<char, string> Mappeo;
+
     bool inicio_J = false;
     bool j_Terminado = false;
 

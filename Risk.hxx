@@ -19,11 +19,11 @@ void Risk::guardarPartidaBin(string nombreArchivo){
 
     allDataToString(ss);
 
+    cout<<ss.str();
+
     //HUFFMAN
 
     std::ostringstream ssBin;
-    cout<<"\n\nPrueba Huffman\n";
-    cout<<"Frecuencia de caracteres: \n";
 
     //Iterar sobre la cadena de caracteres, si el caractér no habia aparecido, contar su frecuencia.
     unordered_map<char, int> charCount;
@@ -37,25 +37,28 @@ void Risk::guardarPartidaBin(string nombreArchivo){
         }
     }
 
-    for (unordered_map<char, int>::iterator it = charCount.begin(); it != charCount.end(); ++it) {
-        std::cout << "'" << it->first << "': " << it->second << std::endl;
-    }
-
     //Creamos una cola de prioridad de nodos para llevar a cabo huffman
 
-    priority_queue<BinaryNode<HuffmanData>*, vector<BinaryNode<HuffmanData>*>, BinaryNode<HuffmanData>::BinaryNodeComparator> colaFrecuencias;
-    //Llenamos la cola con la estructura que creamos
+    vector<BinaryNode<HuffmanData>*> colaFrecuenciasHeap;
     for (unordered_map<char, int>::iterator it = charCount.begin(); it != charCount.end(); ++it) {
-        colaFrecuencias.push(new BinaryNode<HuffmanData>(HuffmanData(it->first, it->second)));
+        colaFrecuenciasHeap.push_back(new BinaryNode<HuffmanData>(HuffmanData(it->first, it->second)));
+        std::push_heap( colaFrecuenciasHeap.begin( ), colaFrecuenciasHeap.end( ),  BinaryNode<HuffmanData>::BinaryNodeComparator());
     }
+
+
+// Convert the vector into a heap
+    //push_heap(colaFrecuenciasHeap.begin(), colaFrecuenciasHeap.end(), BinaryNode<HuffmanData>::BinaryNodeComparator());
 
     //Se realiza el algoritmo huffman utilizando la cola de prioridad
     int sumaFrecuencia;
-    while(colaFrecuencias.size()>1){
-        BinaryNode<HuffmanData>* pNodeAux = colaFrecuencias.top();
-        colaFrecuencias.pop();
-        BinaryNode<HuffmanData>* pNodeAux2 = colaFrecuencias.top();
-        colaFrecuencias.pop();
+    while(colaFrecuenciasHeap.size() != 1){
+        pop_heap(colaFrecuenciasHeap.begin(), colaFrecuenciasHeap.end(), BinaryNode<HuffmanData>::BinaryNodeComparator());
+        BinaryNode<HuffmanData>* pNodeAux = colaFrecuenciasHeap.back();
+        colaFrecuenciasHeap.pop_back();
+
+        pop_heap(colaFrecuenciasHeap.begin(), colaFrecuenciasHeap.end(), BinaryNode<HuffmanData>::BinaryNodeComparator());
+        BinaryNode<HuffmanData>* pNodeAux2 = colaFrecuenciasHeap.back();
+        colaFrecuenciasHeap.pop_back();
 
         sumaFrecuencia=pNodeAux->getData().getFrecuencia()+pNodeAux2->getData().getFrecuencia();
 
@@ -63,21 +66,22 @@ void Risk::guardarPartidaBin(string nombreArchivo){
         tempNode->setLeft(pNodeAux);
         tempNode->setRight(pNodeAux2);
 
-        colaFrecuencias.push(tempNode);
+        colaFrecuenciasHeap.push_back(tempNode);
 
+        push_heap(colaFrecuenciasHeap.begin(), colaFrecuenciasHeap.end(), BinaryNode<HuffmanData>::BinaryNodeComparator());
 
     }
 
     //Creamos el arbol con el nodo final
-    BinaryNode<HuffmanData>* nodeAux = new BinaryNode<HuffmanData>(*colaFrecuencias.top());
-    huffmanTree = BinaryTree<HuffmanData>(nodeAux);
-
+    BinaryNode<HuffmanData>* nodeAux = colaFrecuenciasHeap.back();
+    //huffmanTree = BinaryTree<HuffmanData>(nodeAux);
+    huffmanTree.setRoot(nodeAux);
 
     huffmanTree.mapHuffman(Mappeo);
+    std::cout<<"hola RISK"<<std::endl;
 
     cout<<"\n\nMappeo Huffman"<<endl;
     for (unordered_map<char, string>::iterator it = Mappeo.begin(); it != Mappeo.end(); ++it) {
-        std::cout << "'" << it->first << "': " << it->second << std::endl;
         ss << it->first << ";" << it->second << std::endl;
     }
 
@@ -127,12 +131,16 @@ void Risk::inicializarPartida(string nombreArchivo){
     string auxiliar;
     int contador;
 
+    std::ostringstream ssConvert;
+    queue<char> ordenBinarios;
+
     Jugador jugadorInstance;
     Continente continenteInstance;
     Pais paisInstance;
 
-
     continentes.clear();
+    turnosJugadores.clear();
+    cartas.clear();
 
 
     while(std::getline(extensionRecibida, segmento, '.'))
@@ -157,7 +165,7 @@ void Risk::inicializarPartida(string nombreArchivo){
             if (linea == "TURNOSJUGADORES:") {
                 getline(inputFile, linea);
                 istringstream ss(linea);
-                turnosJugadores.clear();
+
                 while (getline(ss, auxiliar, ';')) {
                     turnosJugadores.push_back(stoi(auxiliar));
                 }
@@ -244,7 +252,7 @@ void Risk::inicializarPartida(string nombreArchivo){
                     getline(inputFile, linea);
                     getline(inputFile, linea);
                     //logica cargar cartas
-                    cartas.clear();
+
                     while (linea != "#") {
                         istringstream ss(linea);
                         contador = 0;
@@ -267,8 +275,29 @@ void Risk::inicializarPartida(string nombreArchivo){
                 }
         }
     }
+    if(seglist[1]=="bin") {
 
 
+        std::ifstream inputFile(nombreArchivo, std::ios::in); // Open the file for reading
+
+        if (!inputFile.is_open()) {
+            std::cout << "Error abriendo el archivo" << std::endl;
+            return;
+        }
+
+        getline(inputFile, linea);
+
+        inputFile.close();
+
+        for(int i=0;i<linea.size();i++){
+            ordenBinarios.push(linea[i]);
+        }
+
+        ssConvert = huffmanTree.binaryToChar(ordenBinarios);
+
+        //cout<< ssConvert.str();
+
+    }
 }
 
 
@@ -310,6 +339,8 @@ void Risk::guardarPartidaText(string nombreArchivo){
     int consolaPais;
 
 
+      huffmanTree = BinaryTree<HuffmanData>();
+
       //Quemamos las cartas a utilizar
 
       cartas.push_back(Carta("Comodin",0,1)); cartas.push_back(Carta("Comodin",0,1));
@@ -331,7 +362,7 @@ void Risk::guardarPartidaText(string nombreArchivo){
         Continente(0, "America del Norte", {
             Pais(1,"Alaska", 0, 0, {6,2,22}),
             Pais(2,"Alberta", 0, 0, {1,2,6,9,7}),
-            Pais(3,"América Central", 0, 0, {32,9,4}),
+            Pais(3,"America Central", 0, 0, {32,9,4}),
             Pais(4,"Estados Unidos Orientales", 0, 0, {3,9,7,8}),
             Pais(5,"Groenlandia", 0, 0, {6,7,8,11}),
             Pais(6,"Territorio Noroccidental", 0, 0, {1,2,7,5}),
@@ -343,7 +374,7 @@ void Risk::guardarPartidaText(string nombreArchivo){
 
     continentes.push_back(
         Continente(1, "Europa", {
-            Pais(10,"Gran Bretaña", 0, 0, {11,13,12,16}),
+            Pais(10,"Gran Bretana", 0, 0, {11,13,12,16}),
             Pais(11,"Islandia", 0, 0, {5,13,10}),
             Pais(12,"Europa del Norte", 0, 0, {10,16,14,13}),
             Pais(13,"Escandinavia", 0, 0, {11,10,12,15}),
@@ -1374,17 +1405,11 @@ void Risk::ingresarTropas(std::list<Jugador>::iterator itdorJugador) {
   }
 
 
-void Risk::huffmanToString(std::ostringstream &ss){
-
-
-
-}
 
 
 
 void Risk::allDataToString(std::ostringstream &ss){
 
-    //std::ostringstream ss;
 
     ss << "TURNOSJUGADORES:\n";
 
@@ -1467,8 +1492,5 @@ void Risk::allDataToString(std::ostringstream &ss){
 
 
 }
-
-
-
 
 #endif
