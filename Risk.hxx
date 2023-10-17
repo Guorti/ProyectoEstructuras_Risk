@@ -19,7 +19,6 @@ void Risk::guardarPartidaBin(string nombreArchivo){
 
     allDataToString(ss);
 
-    cout<<ss.str();
 
     //HUFFMAN
 
@@ -78,13 +77,13 @@ void Risk::guardarPartidaBin(string nombreArchivo){
     huffmanTree.setRoot(nodeAux);
 
     huffmanTree.mapHuffman(Mappeo);
-    std::cout<<"hola RISK"<<std::endl;
-
+    //std::cout<<"hola RISK"<<std::endl;
+    /*
     cout<<"\n\nMappeo Huffman"<<endl;
     for (unordered_map<char, string>::iterator it = Mappeo.begin(); it != Mappeo.end(); ++it) {
         ss << it->first << ";" << it->second << std::endl;
     }
-
+    */
 
     //CONVERSION STRING BINARIO
     for (int i=0;i<ss.str().size();i++) {
@@ -104,6 +103,12 @@ void Risk::guardarPartidaBin(string nombreArchivo){
 
     // Check if the file is successfully opened
     if (outputFile.is_open()) {
+        //Escribimos cada caracter junto a su frecuencia
+        outputFile <<"MAPPEOHUFFMAN:"<<endl;
+        for (unordered_map<char, int>::iterator it = charCount.begin(); it != charCount.end(); ++it) {
+            outputFile << it->first << "_" << it->second << std::endl;
+        }
+        outputFile <<"#"<<endl;
 
         // Write the variable to the file
         outputFile << ssBin.str();
@@ -141,6 +146,8 @@ void Risk::inicializarPartida(string nombreArchivo){
     continentes.clear();
     turnosJugadores.clear();
     cartas.clear();
+
+
 
 
     while(std::getline(extensionRecibida, segmento, '.'))
@@ -276,7 +283,9 @@ void Risk::inicializarPartida(string nombreArchivo){
         }
     }
     if(seglist[1]=="bin") {
+        unordered_map<char, int> charCount;
 
+        std::string atributos[2];
 
         std::ifstream inputFile(nombreArchivo, std::ios::in); // Open the file for reading
 
@@ -285,8 +294,21 @@ void Risk::inicializarPartida(string nombreArchivo){
             return;
         }
 
-        getline(inputFile, linea);
 
+        getline(inputFile, linea);
+        getline(inputFile, linea);
+        while(linea != "#"){
+            contador = 0;
+            istringstream ss(linea);
+            while (getline(ss, auxiliar, '_')) {
+                atributos[contador] = auxiliar;
+                contador++;
+            }
+            charCount[(atributos[0])[0]] = stoi(atributos[1]);
+            getline(inputFile, linea);
+            cout<<linea<<endl;
+        }
+        cout<<"LLEGUEAAAAAAAAAAAAAAA";
         inputFile.close();
 
         for(int i=0;i<linea.size();i++){

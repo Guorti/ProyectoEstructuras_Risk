@@ -44,6 +44,7 @@ string BinaryTree<T>::binaryToCharAux(std::queue<char> &ordenBinarios, BinaryNod
         return binaryToCharAux(ordenBinarios, node->leftChild);
     }
 
+    return "";
 }
 
 template <typename T>
