@@ -43,13 +43,14 @@ void HuffmanData::setFrecuencia(int frecuencia)
 
 bool HuffmanData::operator<(HuffmanData const &otherHuffmanData) const
 {
-    return frecuencia < otherHuffmanData.frecuencia;
+    return frecuencia < otherHuffmanData.frecuencia || (frecuencia == otherHuffmanData.frecuencia && symbol < otherHuffmanData.symbol);
 }
 
 bool HuffmanData::operator>(HuffmanData const &otherHuffmanData) const
 {
-    return frecuencia > otherHuffmanData.frecuencia;
+    return frecuencia > otherHuffmanData.frecuencia || (frecuencia == otherHuffmanData.frecuencia && symbol > otherHuffmanData.symbol);
 }
+
 
 bool HuffmanData::operator==(HuffmanData const &otherHuffmanData) const
 {

@@ -19,7 +19,6 @@ void Risk::guardarPartidaBin(string nombreArchivo){
 
     allDataToString(ss);
 
-
     //HUFFMAN
 
     std::ostringstream ssBin;
@@ -45,7 +44,6 @@ void Risk::guardarPartidaBin(string nombreArchivo){
     }
 
 
-// Convert the vector into a heap
     //push_heap(colaFrecuenciasHeap.begin(), colaFrecuenciasHeap.end(), BinaryNode<HuffmanData>::BinaryNodeComparator());
 
     //Se realiza el algoritmo huffman utilizando la cola de prioridad
@@ -253,7 +251,6 @@ void Risk::inicializarPartida(string nombreArchivo){
                     getline(inputFile, linea);
                 }
                 continentes.push_back(continenteInstance);
-                getline(inputFile, linea);
             }
 
                 if (linea == "CARTASRISK:") {
@@ -287,7 +284,7 @@ void Risk::inicializarPartida(string nombreArchivo){
         unordered_map<char, int> charCount;
         bool specialFlag = false;
 
-        std::string atributos[2];
+        std::string atributos[9];
 
         std::ifstream inputFile(nombreArchivo, std::ios::in); // Open the file for reading
         std::ifstream inputFileAux(nombreArchivo, std::ios::in);
@@ -329,18 +326,192 @@ void Risk::inicializarPartida(string nombreArchivo){
 
             cout<<linea<<endl;
         }
-        cout<<"LLEGUEAAAAAAAAAAAAAAA";
+
+        getline(inputFile, linea);
+
         inputFile.close();
         inputFileAux.close();
+
+        //LOGICA PARA ARMAR EL HUFFMAN TREE
+
+        //Creamos una cola de prioridad de nodos para llevar a cabo huffman
+
+        vector<BinaryNode<HuffmanData>*> colaFrecuenciasHeap;
+        for (unordered_map<char, int>::iterator it = charCount.begin(); it != charCount.end(); ++it) {
+            colaFrecuenciasHeap.push_back(new BinaryNode<HuffmanData>(HuffmanData(it->first, it->second)));
+            std::push_heap( colaFrecuenciasHeap.begin( ), colaFrecuenciasHeap.end( ),  BinaryNode<HuffmanData>::BinaryNodeComparator());
+        }
+
+
+// Convert the vector into a heap
+        //push_heap(colaFrecuenciasHeap.begin(), colaFrecuenciasHeap.end(), BinaryNode<HuffmanData>::BinaryNodeComparator());
+
+        //Se realiza el algoritmo huffman utilizando la cola de prioridad
+        int sumaFrecuencia;
+        while(colaFrecuenciasHeap.size() != 1){
+            pop_heap(colaFrecuenciasHeap.begin(), colaFrecuenciasHeap.end(), BinaryNode<HuffmanData>::BinaryNodeComparator());
+            BinaryNode<HuffmanData>* pNodeAux = colaFrecuenciasHeap.back();
+            colaFrecuenciasHeap.pop_back();
+
+            pop_heap(colaFrecuenciasHeap.begin(), colaFrecuenciasHeap.end(), BinaryNode<HuffmanData>::BinaryNodeComparator());
+            BinaryNode<HuffmanData>* pNodeAux2 = colaFrecuenciasHeap.back();
+            colaFrecuenciasHeap.pop_back();
+
+            sumaFrecuencia=pNodeAux->getData().getFrecuencia()+pNodeAux2->getData().getFrecuencia();
+
+            BinaryNode<HuffmanData>* tempNode = new BinaryNode<HuffmanData>(HuffmanData(sumaFrecuencia));
+            tempNode->setLeft(pNodeAux);
+            tempNode->setRight(pNodeAux2);
+
+            colaFrecuenciasHeap.push_back(tempNode);
+
+            push_heap(colaFrecuenciasHeap.begin(), colaFrecuenciasHeap.end(), BinaryNode<HuffmanData>::BinaryNodeComparator());
+
+        }
+
+        //Creamos el arbol con el nodo final
+        BinaryNode<HuffmanData>* nodeAux = colaFrecuenciasHeap.back();
+        //huffmanTree = BinaryTree<HuffmanData>(nodeAux);
+        huffmanTree.setRoot(nodeAux);
+
+
+
 
         for(int i=0;i<linea.size();i++){
             ordenBinarios.push(linea[i]);
         }
 
         ssConvert = huffmanTree.binaryToChar(ordenBinarios);
+        cout<< ssConvert.str();
 
-        //cout<< ssConvert.str();
+        //Convertimos el ostream a string
+        string contenidoOstr = ssConvert.str();
+        //Convertimos el string a istrinstream para usar \n como delimitador
+        istringstream iss(contenidoOstr);
 
+
+
+
+
+
+        getline(iss, linea);
+        //Cargar los datos
+        while (linea != "#FIN#") {
+            contador = 0;
+
+            if (linea == "TURNOSJUGADORES:") {
+                getline(iss, linea);
+                istringstream ss(linea);
+
+                while (getline(ss, auxiliar, ';')) {
+                    turnosJugadores.push_back(stoi(auxiliar));
+                }
+            }
+
+            if (linea == "ATRIBUTOSJUGADORES:") {
+                jugadores.clear();
+                getline(iss, linea);
+                getline(iss, linea);
+                while (linea != "#") {
+                    contador = 0;
+                    istringstream ss(linea);
+                    while (getline(ss, auxiliar, ';')) {
+                        atributos[contador] = auxiliar;
+                        contador++;
+                    }
+                    jugadorInstance = Jugador(stoi(atributos[0]), atributos[1], stoi(atributos[2]), stoi(atributos[3]));
+                    //Leer apartado de cartas
+                    getline(iss, linea);
+                    //Revisa si tiene cartas
+                    if (linea == "CARTAS:") {
+                        getline(iss, linea);
+                        while (linea != "#") {
+                            istringstream ss(linea);
+                            contador = 0;
+                            while (getline(ss, auxiliar, ';')) {
+                                atributos[contador] = auxiliar;
+                                contador++;
+                            }
+                            jugadorInstance.getCartasVector().push_back(
+                                    Carta(atributos[0], stoi(atributos[1]), stoi(atributos[2])));
+                            getline(iss, linea);
+                        }
+                    } else {
+                        getline(iss, linea);
+                    }
+                    jugadores.push_back(jugadorInstance);
+                }
+
+                contador = 0;
+
+
+
+            }
+
+            if (linea == "CONTINENTE:") {
+
+                getline(iss, linea);
+                istringstream ss(linea);
+                while (getline(ss, auxiliar, ';')) {
+                    atributos[contador] = auxiliar;
+                    contador++;
+                }
+                continenteInstance = Continente(stoi(atributos[0]), atributos[1]);
+                getline(iss, linea);
+                getline(iss, linea);
+                getline(iss, linea);
+                while (linea != "#") {
+                    contador = 0;
+                    istringstream ss(linea);
+                    while (getline(ss, auxiliar, ';')) {
+                        atributos[contador] = auxiliar;
+                        contador++;
+                    }
+                    paisInstance = Pais(stoi(atributos[0]), atributos[1], stoi(atributos[2]), stoi(atributos[3]), {});
+                    //continenteInstance.getPaisesList().push_back(Pais(stoi(atributos[0]), atributos[1], stoi(atributos[2]),
+                    //stoi(atributos[3]), {}));
+                    //Leer apartado colindantes
+                    getline(iss, linea);
+                    getline(iss, linea);
+                    istringstream sss(linea);
+                    while (getline(sss, auxiliar, ';')) {
+                        paisInstance.getPaisesColindantes().push_back(stoi(auxiliar));
+                    }
+                    continenteInstance.getPaisesList().push_back(paisInstance);
+                    getline(iss, linea);
+                }
+                continentes.push_back(continenteInstance);
+                //getline(iss, linea);
+            }
+
+            if (linea == "CARTASRISK:") {
+                getline(iss, linea);
+                getline(iss, linea);
+                //logica cargar cartas
+
+                while (linea != "#") {
+                    istringstream ss(linea);
+                    contador = 0;
+                    while (getline(ss, auxiliar, ';')) {
+                        atributos[contador] = auxiliar;
+                        contador++;
+                    }
+                    cartas.push_back(Carta(atributos[0], stoi(atributos[1]), stoi(atributos[2])));
+                    getline(iss, linea);
+                }
+            }
+
+            if (linea == "TURNOPARTIDA:") {
+                getline(iss, linea);
+                turnoPartida = stoi(linea);
+            }
+            if (linea == "RECLAMOCARTAS:") {
+                getline(iss, linea);
+                reclamoCartas = stoi(linea);
+            }
+            getline(iss, linea);
+        }
+        inicio_J=true;
     }
 }
 

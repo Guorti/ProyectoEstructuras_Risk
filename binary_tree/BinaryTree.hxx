@@ -195,7 +195,6 @@ void BinaryTree<T>::mapHuffman(unordered_map<char, string> &mapHuff)
     deque<char> dequeLeaf;
 
     mapHuffmanAux(root, mapHuff, dequeLeaf);
-    std::cout<<"hola RISK"<<std::endl;
     return;
 }
 
