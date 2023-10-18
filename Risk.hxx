@@ -133,6 +133,7 @@ void Risk::inicializarPartida(string nombreArchivo){
     std::vector<std::string> seglist;
 
     string linea;
+    string lineaAux;
     string auxiliar;
     int contador;
 
@@ -284,10 +285,12 @@ void Risk::inicializarPartida(string nombreArchivo){
     }
     if(seglist[1]=="bin") {
         unordered_map<char, int> charCount;
+        bool specialFlag = false;
 
         std::string atributos[2];
 
         std::ifstream inputFile(nombreArchivo, std::ios::in); // Open the file for reading
+        std::ifstream inputFileAux(nombreArchivo, std::ios::in);
 
         if (!inputFile.is_open()) {
             std::cout << "Error abriendo el archivo" << std::endl;
@@ -297,6 +300,9 @@ void Risk::inicializarPartida(string nombreArchivo){
 
         getline(inputFile, linea);
         getline(inputFile, linea);
+
+        getline(inputFileAux, lineaAux);
+        getline(inputFileAux, lineaAux);
         while(linea != "#"){
             contador = 0;
             istringstream ss(linea);
@@ -304,12 +310,28 @@ void Risk::inicializarPartida(string nombreArchivo){
                 atributos[contador] = auxiliar;
                 contador++;
             }
-            charCount[(atributos[0])[0]] = stoi(atributos[1]);
+            if(specialFlag==true){
+                charCount['\n'] = stoi(atributos[1]);
+                specialFlag=false;
+            }else{
+                charCount[(atributos[0])[0]] = stoi(atributos[1]);
+            }
+
+            getline(inputFileAux, lineaAux);
+
+            if(lineaAux.size()==0){
+                //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                inputFile.ignore();
+                specialFlag=true;
+            }
             getline(inputFile, linea);
+
+
             cout<<linea<<endl;
         }
         cout<<"LLEGUEAAAAAAAAAAAAAAA";
         inputFile.close();
+        inputFileAux.close();
 
         for(int i=0;i<linea.size();i++){
             ordenBinarios.push(linea[i]);
