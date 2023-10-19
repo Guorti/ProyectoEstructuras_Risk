@@ -194,6 +194,7 @@ void Risk::inicializarPartida(string nombreArchivo){
                     //Revisa si tiene cartas
                     if (linea == "CARTAS:") {
                         getline(inputFile, linea);
+                        getline(inputFile, linea);
                         while (linea != "#") {
                             istringstream ss(linea);
                             contador = 0;
@@ -205,6 +206,7 @@ void Risk::inicializarPartida(string nombreArchivo){
                                     Carta(atributos[0], stoi(atributos[1]), stoi(atributos[2])));
                             getline(inputFile, linea);
                         }
+                        getline(inputFile, linea);
                     } else {
                         getline(inputFile, linea);
                     }
@@ -279,6 +281,7 @@ void Risk::inicializarPartida(string nombreArchivo){
                     reclamoCartas = stoi(linea);
                 }
         }
+        inicio_J=true;
     }
     if(seglist[1]=="bin") {
         unordered_map<char, int> charCount;
@@ -322,7 +325,6 @@ void Risk::inicializarPartida(string nombreArchivo){
                 specialFlag=true;
             }
             getline(inputFile, linea);
-
 
             cout<<linea<<endl;
         }
@@ -425,6 +427,7 @@ void Risk::inicializarPartida(string nombreArchivo){
                     //Revisa si tiene cartas
                     if (linea == "CARTAS:") {
                         getline(iss, linea);
+                        getline(iss, linea);
                         while (linea != "#") {
                             istringstream ss(linea);
                             contador = 0;
@@ -436,15 +439,13 @@ void Risk::inicializarPartida(string nombreArchivo){
                                     Carta(atributos[0], stoi(atributos[1]), stoi(atributos[2])));
                             getline(iss, linea);
                         }
+                        getline(iss, linea);
                     } else {
                         getline(iss, linea);
                     }
                     jugadores.push_back(jugadorInstance);
                 }
-
                 contador = 0;
-
-
 
             }
 
