@@ -7,6 +7,8 @@
 #include "binary_tree/BinaryTree.h"
 #include "huffman_data/HuffmanData.h"
 #include <string>
+#include "Continente.h"
+#include "Pais.h"
 
 class Risk {
 
@@ -30,6 +32,12 @@ public:
     bool inicio_J = false;
     bool j_Terminado = false;
 
+    list<Jugador> getJugadores();
+
+    void setTurnoPartida(int turnoPartida);
+    void setReclamoCartas(int reclamoCartas);
+
+
     void inicializar();
     int generarAleatorio();
     void turno(int turno);
@@ -51,7 +59,7 @@ public:
 
     void inicializarPartida(std::string nombreArchivo);
 
-    void huffmanToString(std::ostringstream &ss);
+    void setTestData();
 
 };
 

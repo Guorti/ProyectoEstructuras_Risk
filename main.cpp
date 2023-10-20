@@ -19,6 +19,9 @@ std::string consola;
 
 int main() {
 
+    std::string segmento;
+    std::vector<std::string> seglist;
+
 
     srand(time(NULL));
 
@@ -48,11 +51,22 @@ int main() {
         std::cout<<std::endl;
      
       if(consola == "turno 1" || consola == "turno 2"||consola == "turno 3"|| consola == "turno 4"|| consola == "turno 5"|| consola == "turno 6"){
-if (!consola.empty()) {
-      consolaTurno =consola.substr(0,5);;
-      numero = consola.substr(6,1);
-}
+        if (!consola.empty()) {
+              consolaTurno =consola.substr(0,5);;
+              numero = consola.substr(6,1);
+        }
       }
+
+      //Dividimos el string recibido
+        std::stringstream consolaSplit;
+        consolaSplit << consola;
+        seglist.clear();
+
+        while(std::getline(consolaSplit, segmento, ' '))
+        {
+            seglist.push_back(segmento);
+        }
+
        
      
       if(consolaTurno == "turno" && numero == "1"){
@@ -114,25 +128,21 @@ Risk1.turno(numeroTurno);
         }else if(consola =="salir"){
            
         }
-        else if(consola =="inicializar archivo"){
+        else if(seglist[0] =="inicializar_archivo"){
             if(Risk1.inicio_J == true){
                 std::cout<<"(Juego en curso) El juego ya ha sido inicializado."<<std::endl;
             }else{
-                std::cout<<"Ingrese el nombre del archivo a cargar."<<std::endl;
-                std::cin>> nombreArchivo;
-                //Risk1.allDataToString();
-                Risk1.inicializarPartida(nombreArchivo);
+
+                Risk1.inicializarPartida(seglist[1]);
                 std::cout<<"Comando exitoso!"<<std::endl;
             }
 
-        }else if(consola=="guardar"){
+        }else if(seglist[0]=="guardar"){
            if(Risk1.inicio_J == false){
                std::cout<<"(Juego no inicializado) Esta partida no ha sido inicializada correctamente."<<std::endl;
            }else{
-               std::cout<<"Ingrese el nombre del nuevo archivo."<<std::endl;
-               std::cin>> nombreArchivo;
-               //Risk1.allDataToString();
-               Risk1.guardarPartidaText(nombreArchivo);
+
+               Risk1.guardarPartidaText(seglist[1]);
                std::cout<<"Comando exitoso!"<<std::endl;
            }
 
@@ -144,13 +154,11 @@ Risk1.turno(numeroTurno);
             } else {
                 std::cout<<"(Juego en curso) El juego ya ha sido inicializado"<<std::endl;
             }
-        }else if(consola =="guardar_comprimido"){
+        }else if(seglist[0] =="guardar_comprimido"){
             if(Risk1.inicio_J == false){
                 std::cout<<"(Juego no inicializado) Esta partida no ha sido inicializada correctamente."<<std::endl;
             }else{
-                std::cout<<"Ingrese el nombre del nuevo archivo."<<std::endl;
-                std::cin>> nombreArchivo;
-                Risk1.guardarPartidaBin(nombreArchivo);
+                Risk1.guardarPartidaBin(seglist[1]);
                 std::cout<<"Comando exitoso!"<<std::endl;
             }
             std::cout<<"Comando exitoso!"<<std::endl;

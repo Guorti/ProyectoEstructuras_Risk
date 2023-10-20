@@ -11,6 +11,20 @@
 
 using namespace std;
 
+void Risk::setTurnoPartida(int turnoPartida){
+    this->turnoPartida=turnoPartida;
+}
+
+void Risk::setReclamoCartas(int reclamoCartas){
+    this->reclamoCartas=reclamoCartas;
+}
+
+
+list<Jugador> Risk::getJugadores() {
+    return jugadores;
+}
+
+
 //GUARDADO HUFFMAN
 
 
@@ -145,8 +159,6 @@ void Risk::inicializarPartida(string nombreArchivo){
     continentes.clear();
     turnosJugadores.clear();
     cartas.clear();
-
-
 
 
     while(std::getline(extensionRecibida, segmento, '.'))
@@ -390,10 +402,6 @@ void Risk::inicializarPartida(string nombreArchivo){
         string contenidoOstr = ssConvert.str();
         //Convertimos el string a istrinstream para usar \n como delimitador
         istringstream iss(contenidoOstr);
-
-
-
-
 
 
         getline(iss, linea);
@@ -747,7 +755,7 @@ void Risk::guardarPartidaText(string nombreArchivo){
 
    
     //42 iteraciones para agregar 1 infanteria en todos los paises
-    for(int i=0;i<3;i++){
+    for(int i=0;i<42;i++){
       do{
       contador=0;
       //std::cout<<"\nJugador "<<*itdorT <<" estos son los continentes"<<std::endl<<std::endl;
@@ -1706,6 +1714,96 @@ void Risk::allDataToString(std::ostringstream &ss){
     ss << reclamoCartas << "\n";
     ss << "#FIN#\n";
 
+}
+
+void Risk::setTestData(){
+
+    cartas.push_back(Carta("Comodin",0,1)); cartas.push_back(Carta("Comodin",0,1));
+
+    cartas.push_back(Carta("Caballeria", 1, 0));cartas.push_back(Carta("Infanteria", 2, 0));cartas.push_back(Carta("Artilleria", 3, 0));cartas.push_back(Carta("Caballeria", 4, 0));
+    cartas.push_back(Carta("Artilleria", 5, 0));cartas.push_back(Carta("Infanteria", 6, 0));cartas.push_back(Carta("Infanteria", 7, 0));cartas.push_back(Carta("Caballeria", 8, 0));
+    cartas.push_back(Carta("Caballeria", 9, 0));cartas.push_back(Carta("Artilleria", 10, 0));cartas.push_back(Carta("Infanteria", 11, 0));cartas.push_back(Carta("Caballeria", 12, 0));
+    cartas.push_back(Carta("Artilleria", 13, 0));cartas.push_back(Carta("Infanteria", 14, 0));cartas.push_back(Carta("Infanteria", 15, 0));cartas.push_back(Carta("Artilleria", 16, 0));
+    cartas.push_back(Carta("Artilleria", 17, 0));cartas.push_back(Carta("Infanteria", 18, 0));cartas.push_back(Carta("Caballeria", 19, 0));cartas.push_back(Carta("Caballeria", 20, 0));
+    cartas.push_back(Carta("Caballeria", 21, 0));cartas.push_back(Carta("Artilleria", 22, 0));cartas.push_back(Carta("Infanteria", 23, 0));cartas.push_back(Carta("Caballeria", 24, 0));
+    cartas.push_back(Carta("Caballeria", 25, 0));cartas.push_back(Carta("Infanteria", 26, 0));cartas.push_back(Carta("Infanteria", 27, 0));cartas.push_back(Carta("Caballeria", 28, 0));
+    cartas.push_back(Carta("Infanteria", 29, 0));cartas.push_back(Carta("Artilleria", 30, 0));cartas.push_back(Carta("Infanteria", 31, 0));cartas.push_back(Carta("Artilleria", 32, 0));
+    cartas.push_back(Carta("Artilleria", 33, 0));cartas.push_back(Carta("Artilleria", 34, 0));cartas.push_back(Carta("Infanteria", 35, 0));cartas.push_back(Carta("Caballeria", 36, 0));
+    cartas.push_back(Carta("Artilleria", 37, 0));cartas.push_back(Carta("Caballeria", 38, 0));cartas.push_back(Carta("Artilleria", 39, 0));cartas.push_back(Carta("Caballeria", 40, 0));
+    cartas.push_back(Carta("Caballeria", 41, 0));cartas.push_back(Carta("Infanteria", 42, 0));
+
+
+    continentes.push_back(
+            Continente(0, "America del Norte", {
+                    Pais(1,"Alaska", 0, 0, {6,2,22}),
+                    Pais(2,"Alberta", 0, 0, {1,2,6,9,7}),
+                    Pais(3,"America Central", 0, 0, {32,9,4}),
+                    Pais(4,"Estados Unidos Orientales", 0, 0, {3,9,7,8}),
+                    Pais(5,"Groenlandia", 0, 0, {6,7,8,11}),
+                    Pais(6,"Territorio Noroccidental", 0, 0, {1,2,7,5}),
+                    Pais(7,"Ontario", 0, 0, {6,2,9,4,8,5}),
+                    Pais(8,"Quebec", 0, 0, {5,7,4}),
+                    Pais(9,"Estados Unidos Occidentales", 0, 0, {2,7,4,3}),
+            })
+    );
+
+    continentes.push_back(
+            Continente(1, "Europa", {
+                    Pais(10,"Gran Bretana", 0, 0, {11,13,12,16}),
+                    Pais(11,"Islandia", 0, 0, {5,13,10}),
+                    Pais(12,"Europa del Norte", 0, 0, {10,16,14,13}),
+                    Pais(13,"Escandinavia", 0, 0, {11,10,12,15}),
+                    Pais(14,"Europa del Sur", 0, 0, {12,16,15,23,37,35}),
+                    Pais(15,"Ucrania", 0, 0, {13,12,14,23,17,27}),
+                    Pais(16,"Europa Occidental", 0, 0, {10,12,14,37}),
+            })
+    );
+
+    continentes.push_back(
+            Continente(2, "Asia", {
+                    Pais(17,"Afghanistan", 0, 0, {18,19,27,23,15}),
+                    Pais(18,"China", 0, 0, {19,25,24,17}),
+                    Pais(19,"India", 0, 0, {25,18,17,23}),
+                    Pais(20,"Irkutsk", 0, 0, {24,22,28,26}),
+                    Pais(21,"Japon", 0, 0, {24,22}),
+                    Pais(22,"Kamchatka", 0, 0, {21,20,24,28}),
+                    Pais(23,"Medio Oriente", 0, 0, {17,19,15,35,14}),
+                    Pais(24,"Mongolia", 0, 0, {22,20,21,18,26}),
+                    Pais(25,"Siam", 0, 0, {40,18,19}),
+                    Pais(26,"Siberia", 0, 0, {20,18,27,28,24}),
+                    Pais(27,"Ural", 0, 0, {17,15,26}),
+                    Pais(28,"Yakutsk", 0, 0, {26,20,22,18}),
+            })
+    );
+
+    continentes.push_back(
+            Continente(3, "America del Sur", {
+                    Pais(29,"Argentina", 0, 0, {30,31}),
+                    Pais(30,"Brasil", 0, 0, {29,31,32,37}),
+                    Pais(31,"Peru", 0, 0, {29,30,32}),
+                    Pais(32,"Venezuela", 0, 0, {30,31,3}),
+            })
+    );
+
+    continentes.push_back(
+            Continente(4, "Africa", {
+                    Pais(33,"Congo", 0, 0, {34,37,38}),
+                    Pais(34,"Africa Oriental", 0, 0, {33,35,36,37,38}),
+                    Pais(35,"Egipto", 0, 0, {34,37,23,14}),
+                    Pais(36,"Madagascar", 0, 0, {34,38}),
+                    Pais(37,"Africa del Norte", 0, 0, {33,34,35,30,14,16}),
+                    Pais(38,"Africa del Sur", 0, 0, {33,34,36}),
+            })
+    );
+
+    continentes.push_back(
+            Continente(5,"Australia", {
+                    Pais(39,"Australia Oriental", 0, 0, {41,42}),
+                    Pais(40,"Indonesia", 0, 0, {41,42,25}),
+                    Pais(41,"Nueva Guinea", 0, 0, {39,40,42}),
+                    Pais(42,"Australia Occidental", 0, 0, {39,40,41}),
+            })
+    );
 
 }
 
