@@ -32,7 +32,9 @@ public:
     bool inicio_J = false;
     bool j_Terminado = false;
 
-    list<Jugador> getJugadores();
+    list<Jugador>& getJugadores();
+    list<int>& getTurnosJugadores();
+
 
     void setTurnoPartida(int turnoPartida);
     void setReclamoCartas(int reclamoCartas);

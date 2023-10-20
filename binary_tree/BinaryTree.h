@@ -40,22 +40,13 @@ public:
 
     void setRoot(BinaryNode<T> *node);
 
-
-    // No tiene sentido implementar un setter para el nodo raíz, ya que
-    // no se deberia poder cambiar el nodo raíz de un árbol binario.
-    // void setRoot(BinaryNode<T> *root);
-
     std::ostringstream binaryToChar(std::queue<char> &ordenBinarios);
-
-
-
-
 
     bool isEmpty() const;
 
-    bool addNode(T const &data);
-
     void mapHuffman(unordered_map<char, string> &mapHuff);
+
+    bool addNode(T const &data);
 
     list<T> preOrder() const;
     list<T> inOrder() const;

@@ -8,6 +8,8 @@
 #include <fstream>
 #include <sstream>
 #include <queue>
+#include <random>
+#include <algorithm>
 
 using namespace std;
 
@@ -20,10 +22,13 @@ void Risk::setReclamoCartas(int reclamoCartas){
 }
 
 
-list<Jugador> Risk::getJugadores() {
+list<Jugador>& Risk::getJugadores() {
     return jugadores;
 }
 
+list<int>& Risk::getTurnosJugadores(){
+    return turnosJugadores;
+}
 
 //GUARDADO HUFFMAN
 
@@ -105,9 +110,6 @@ void Risk::guardarPartidaBin(string nombreArchivo){
         }
     }
 
-    std::cout << ssBin.str();
-
-    std::cout<<endl;
 
     //FIN HUFFMAN
     // Open a file named "output.txt" for writing
@@ -309,7 +311,6 @@ void Risk::inicializarPartida(string nombreArchivo){
             return;
         }
 
-
         getline(inputFile, linea);
         getline(inputFile, linea);
 
@@ -337,8 +338,6 @@ void Risk::inicializarPartida(string nombreArchivo){
                 specialFlag=true;
             }
             getline(inputFile, linea);
-
-            cout<<linea<<endl;
         }
 
         getline(inputFile, linea);
@@ -396,7 +395,6 @@ void Risk::inicializarPartida(string nombreArchivo){
         }
 
         ssConvert = huffmanTree.binaryToChar(ordenBinarios);
-        cout<< ssConvert.str();
 
         //Convertimos el ostream a string
         string contenidoOstr = ssConvert.str();
@@ -529,7 +527,6 @@ void Risk::guardarPartidaText(string nombreArchivo){
     std::ostringstream ss;
 
         allDataToString(ss);
-        cout << ss.str();
 
         // Open a file named "output.txt" for writing
         std::ofstream outputFile(nombreArchivo);
@@ -671,7 +668,7 @@ void Risk::guardarPartidaText(string nombreArchivo){
     //Se revuelven la cartas (Funcion dada por gpt)
     std::random_device rd;
     std::mt19937 rng(rd());
-    std::shuffle(cartas.begin(), cartas.end(),rng);
+    shuffle(cartas.begin(), cartas.end(),rng);
    
     for(int i=1;i<cantidadJugadores+1;i++){
       flag=false;

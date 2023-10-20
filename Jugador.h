@@ -4,6 +4,7 @@
 
 #include <string>
 #include "Carta.h"
+#include <vector>
 
 //CLASE JUGADOR-------------------------
 class Jugador {

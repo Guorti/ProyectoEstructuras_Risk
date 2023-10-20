@@ -2,6 +2,7 @@
 #define CARTA_HXX
 
 #include "Carta.h"
+#include <iostream>
 
 //METODOS
 void Carta::displayCartaInfo() {

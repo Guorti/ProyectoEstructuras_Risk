@@ -1,6 +1,8 @@
 // Continente.h
 #ifndef CONTINENTE_H
 #define CONTINENTE_H
+#include <list>
+#include "Pais.h"
 
 class Continente {
 private:
